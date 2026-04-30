@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIMS Prototype v0.1 — Textile Testing</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    header {
+      background: #1e40af;
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header span { opacity: 0.75; font-size: 0.875rem; }
+
+    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .card-header h2 { font-size: 1rem; color: #475569; }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 0.5rem;
+    }
+
+    select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      min-width: 240px;
+      background: white;
+    }
+
+    .role-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-left: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s;
+    }
+
+    .tab:hover { color: #2563eb; }
+    .tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-apparel { background: #dbeafe; color: #1e40af; }
+    .badge-fabric { background: #dcfce7; color: #166534; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>LIMS Prototype v0.1 <span>— Textile Testing</span></h1>
+</header>
+
+<div class="container">
+
+  <!-- Role Selector -->
+  <div class="card">
+    <div class="card-header">
+      <h2>👤 Role Selection</h2>
+      <span id="role-badge" class="role-badge" style="display:none"></span>
+    </div>
+    <label for="role-select">Select your role to begin:</label>
+    <select id="role-select">
+      <option value="">— Choose Role —</option>
+      <option value="brand_rep">Brand Rep</option>
+      <option value="receptionist">Lab Receptionist</option>
+      <option value="tech">Lab Technician</option>
+      <option value="director">Lab Director</option>
+    </select>
+    <p id="welcome-msg" style="margin-top:1rem;color:#64748b;font-size:0.9rem;display:none"></p>
+  </div>
+
+  <!-- Reference Data Tabs -->
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" data-tab="products">Products</div>
+      <div class="tab" data-tab="tests">Tests & Ranges</div>
+      <div class="tab" data-tab="users">Demo Users</div>
+    </div>
+
+    <div id="tab-products" class="tab-content active">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>SKU</th><th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="products-body"></tbody>
+      </table>
+    </div>
+
+    <div id="tab-tests" class="tab-content">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Test Name</th><th>Unit</th><th>Normal Range</th><th>Method</th>
+          </tr>
+        </thead>
+        <tbody id="tests-body"></tbody>
+      </table>
+    </div>
+
+    <div id="tab-users" class="tab-content">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Role</th><th>Staff ID</th>
+          </tr>
+        </thead>
+        <tbody id="users-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  LIMS Prototype v0.1 — STORY-2 · Textile &amp; Softline Testing Lab
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── Reference Data ────────────────────────────────────────────────────────────
+
+const PRODUCTS = [
+  { id: 'P001', name: 'Cotton T-Shirt',       sku: 'CT-2024-A',  category: 'Apparel' },
+  { id: 'P002', name: 'Denim Jeans',           sku: 'DJ-2024-B',  category: 'Apparel' },
+  { id: 'P003', name: 'Polyester Jacket',      sku: 'PJ-2024-C',  category: 'Apparel' },
+  { id: 'P004', name: 'Cotton Fabric Roll',    sku: 'CFR-2024-R', category: 'Fabric'  },
+  { id: 'P005', name: 'Wool Sweater',          sku: 'WS-2024-W',  category: 'Apparel' },
+];
+
+const TESTS = [
+  { id: 'T001', name: 'Colorfastness to Washing', unit: 'Grade',  range: '≥ 3.0',   method: 'ISO 105-C10' },
+  { id: 'T002', name: 'Shrinkage',                 unit: '%',      range: '≤ 5.0',   method: 'ISO 6330'   },
+  { id: 'T003', name: 'pH Value',                  unit: 'pH',     range: '4.5–8.5', method: 'ISO 3071'   },
+  { id: 'T004', name: 'Tensile Strength',          unit: 'N',      range: '≥ 200',   method: 'ISO 13934-2'},
+  { id: 'T005', name: 'REACH Chemical (AZO)',       unit: 'mg/kg',  range: '≤ 30',    method: 'ISO 14362'  },
+];
+
+const USERS = [
+  { id: 'U001', name: 'Sarah Chen',   role: 'Brand Rep',          staffId: 'BR-001' },
+  { id: 'U002', name: 'John Lam',    role: 'Lab Receptionist',   staffId: 'LR-001' },
+  { id: 'U003', name: 'Mary Wong',   role: 'Lab Technician',      staffId: 'LT-001' },
+  { id: 'U004', name: 'Dr. Alan Ng', role: 'Lab Director',        staffId: 'LD-001' },
+];
+
+const ROLE_LABELS = {
+  brand_rep:    'Brand Rep',
+  receptionist: 'Lab Receptionist',
+  tech:         'Lab Technician',
+  director:     'Lab Director',
+};
+
+const ROLE_WELCOME = {
+  brand_rep:    'Welcome, Sarah Chen. You can submit new test orders for your products.',
+  receptionist: 'Welcome, John Lam. You can register incoming samples from Brand Reps.',
+  tech:         'Welcome, Mary Wong. You can enter and update test results for registered samples.',
+  director:     'Welcome, Dr. Alan Ng. You can review results and generate PDF reports.',
+};
+
+// ── Render Helpers ─────────────────────────────────────────────────────────────
+
+function renderProducts() {
+  const tbody = document.getElementById('products-body');
+  tbody.innerHTML = PRODUCTS.map(p => `
+    <tr>
+      <td><code>${p.id}</code></td>
+      <td>${p.name}</td>
+      <td><code>${p.sku}</code></td>
+      <td><span class="badge badge-${p.category.toLowerCase()}">${p.category}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderTests() {
+  const tbody = document.getElementById('tests-body');
+  tbody.innerHTML = TESTS.map(t => `
+    <tr>
+      <td><code>${t.id}</code></td>
+      <td>${t.name}</td>
+      <td>${t.unit}</td>
+      <td><strong>${t.range}</strong></td>
+      <td><code>${t.method}</code></td>
+    </tr>
+  `).join('');
+}
+
+function renderUsers() {
+  const tbody = document.getElementById('users-body');
+  tbody.innerHTML = USERS.map(u => `
+    <tr>
+      <td><code>${u.id}</code></td>
+      <td>${u.name}</td>
+      <td>${u.role}</td>
+      <td><code>${u.staffId}</code></td>
+    </tr>
+  `).join('');
+}
+
+// ── Tab Logic ─────────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ── Role Selector ─────────────────────────────────────────────────────────────
+
+const roleSelect = document.getElementById('role-select');
+const roleBadge  = document.getElementById('role-badge');
+const welcomeMsg = document.getElementById('welcome-msg');
+
+roleSelect.addEventListener('change', () => {
+  const val = roleSelect.value;
+  if (!val) {
+    roleBadge.style.display = 'none';
+    welcomeMsg.style.display = 'none';
+    return;
+  }
+  roleBadge.textContent = ROLE_LABELS[val];
+  roleBadge.style.display = 'inline-block';
+  welcomeMsg.textContent = ROLE_WELCOME[val];
+  welcomeMsg.style.display = 'block';
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+renderProducts();
+renderTests();
+renderUsers();
+</script>
+</body>
+</html>
