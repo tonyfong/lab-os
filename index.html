@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LIMS Prototype v0.1 — Textile Testing</title>
+  <title>LIMS Prototype v0.2 — Textile Testing</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -53,14 +53,30 @@
       margin-bottom: 0.5rem;
     }
 
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    textarea,
     select {
       padding: 0.5rem 0.75rem;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       font-size: 1rem;
-      min-width: 240px;
       background: white;
+      width: 100%;
+      max-width: 360px;
     }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    input.error, select.error { border-color: #dc2626; }
+    .field-error { color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem; }
 
     .role-badge {
       display: inline-block;
@@ -132,6 +148,152 @@
 
     .badge-apparel { background: #dbeafe; color: #1e40af; }
     .badge-fabric { background: #dcfce7; color: #166534; }
+    .badge-pending    { background: #fef9c3; color: #854d0e; }
+    .badge-received  { background: #dbeafe; color: #1e40af; }
+    .badge-testing   { background: #e0e7ff; color: #3730a3; }
+    .badge-review    { background: #fee2e2; color: #991b1b; }
+    .badge-approved  { background: #dcfce7; color: #166534; }
+    .badge-ready     { background: #dcfce7; color: #166534; }
+
+    /* ── Role Panel ── */
+    #role-panel { display: none; }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 1.5rem;
+    }
+
+    .form-grid .full-width { grid-column: 1 / -1; }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: #334155;
+      cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #2563eb;
+    }
+
+    .btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .btn-sm {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    /* ── Order List ── */
+    #orders-list { margin-top: 1.5rem; }
+
+    .order-count {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .order-row td:nth-child(4) { font-size: 0.8rem; color: #64748b; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.hidden { display: none; }
+
+    .modal {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-header h3 { font-size: 1rem; color: #1e293b; }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #94a3b8;
+      line-height: 1;
+    }
+
+    .modal-close:hover { color: #475569; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .detail-label { color: #64748b; font-weight: 500; }
+    .detail-value { color: #1e293b; }
+
+    .detail-value .badge { margin-right: 0.25rem; }
 
     footer {
       text-align: center;
@@ -144,7 +306,7 @@
 <body>
 
 <header>
-  <h1>LIMS Prototype v0.1 <span>— Textile Testing</span></h1>
+  <h1>LIMS Prototype v0.2 <span>— Textile Testing</span></h1>
 </header>
 
 <div class="container">
@@ -166,6 +328,9 @@
     <p id="welcome-msg" style="margin-top:1rem;color:#64748b;font-size:0.9rem;display:none"></p>
   </div>
 
+  <!-- Role-specific panel -->
+  <div id="role-panel" class="card"></div>
+
   <!-- Reference Data Tabs -->
   <div class="card">
     <div class="tabs">
@@ -177,9 +342,7 @@
     <div id="tab-products" class="tab-content active">
       <table>
         <thead>
-          <tr>
-            <th>ID</th><th>Name</th><th>SKU</th><th>Category</th>
-          </tr>
+          <tr><th>ID</th><th>Name</th><th>SKU</th><th>Category</th></tr>
         </thead>
         <tbody id="products-body"></tbody>
       </table>
@@ -188,9 +351,7 @@
     <div id="tab-tests" class="tab-content">
       <table>
         <thead>
-          <tr>
-            <th>ID</th><th>Test Name</th><th>Unit</th><th>Normal Range</th><th>Method</th>
-          </tr>
+          <tr><th>ID</th><th>Test Name</th><th>Unit</th><th>Normal Range</th><th>Method</th></tr>
         </thead>
         <tbody id="tests-body"></tbody>
       </table>
@@ -199,9 +360,7 @@
     <div id="tab-users" class="tab-content">
       <table>
         <thead>
-          <tr>
-            <th>ID</th><th>Name</th><th>Role</th><th>Staff ID</th>
-          </tr>
+          <tr><th>ID</th><th>Name</th><th>Role</th><th>Staff ID</th></tr>
         </thead>
         <tbody id="users-body"></tbody>
       </table>
@@ -210,13 +369,26 @@
 
 </div>
 
+<!-- Order Detail Modal -->
+<div id="order-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Order Details</h3>
+      <button class="modal-close" id="modal-close">×</button>
+    </div>
+    <div id="modal-body" class="detail-grid"></div>
+  </div>
+</div>
+
 <footer>
-  LIMS Prototype v0.1 — STORY-2 · Textile &amp; Softline Testing Lab
+  LIMS Prototype v0.2 — STORY-3 · Textile &amp; Softline Testing Lab
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ── Reference Data ────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// REFERENCE DATA
+// ═══════════════════════════════════════════════════════════
 
 const PRODUCTS = [
   { id: 'P001', name: 'Cotton T-Shirt',       sku: 'CT-2024-A',  category: 'Apparel' },
@@ -227,10 +399,10 @@ const PRODUCTS = [
 ];
 
 const TESTS = [
-  { id: 'T001', name: 'Colorfastness to Washing', unit: 'Grade',  range: '≥ 3.0',   method: 'ISO 105-C10' },
-  { id: 'T002', name: 'Shrinkage',                 unit: '%',      range: '≤ 5.0',   method: 'ISO 6330'   },
-  { id: 'T003', name: 'pH Value',                  unit: 'pH',     range: '4.5–8.5', method: 'ISO 3071'   },
-  { id: 'T004', name: 'Tensile Strength',          unit: 'N',      range: '≥ 200',   method: 'ISO 13934-2'},
+  { id: 'T001', name: 'Colorfastness to Washing', unit: 'Grade',  range: '≥ 3.0',   method: 'ISO 105-C10'  },
+  { id: 'T002', name: 'Shrinkage',                 unit: '%',      range: '≤ 5.0',   method: 'ISO 6330'    },
+  { id: 'T003', name: 'pH Value',                  unit: 'pH',     range: '4.5–8.5', method: 'ISO 3071'    },
+  { id: 'T004', name: 'Tensile Strength',          unit: 'N',      range: '≥ 200',   method: 'ISO 13934-2' },
   { id: 'T005', name: 'REACH Chemical (AZO)',       unit: 'mg/kg',  range: '≤ 30',    method: 'ISO 14362'  },
 ];
 
@@ -240,6 +412,32 @@ const USERS = [
   { id: 'U003', name: 'Mary Wong',   role: 'Lab Technician',      staffId: 'LT-001' },
   { id: 'U004', name: 'Dr. Alan Ng', role: 'Lab Director',        staffId: 'LD-001' },
 ];
+
+const STATUS_BADGE = {
+  'Pending':         'badge-pending',
+  'Sample Received': 'badge-received',
+  'Testing':         'badge-testing',
+  'Ready for Review':'badge-review',
+  'Approved':        'badge-approved',
+  'Report Ready':    'badge-ready',
+};
+
+// ═══════════════════════════════════════════════════════════
+// ORDERS STATE
+// ═══════════════════════════════════════════════════════════
+
+const orders = [];
+let orderCounter = 0;
+
+function nextOrderNumber() {
+  orderCounter++;
+  const year = new Date().getFullYear();
+  return `ORD-${year}-${String(orderCounter).padStart(4, '0')}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// ROLE CONFIG
+// ═══════════════════════════════════════════════════════════
 
 const ROLE_LABELS = {
   brand_rep:    'Brand Rep',
@@ -255,11 +453,12 @@ const ROLE_WELCOME = {
   director:     'Welcome, Dr. Alan Ng. You can review results and generate PDF reports.',
 };
 
-// ── Render Helpers ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════════════════════════════════
 
 function renderProducts() {
-  const tbody = document.getElementById('products-body');
-  tbody.innerHTML = PRODUCTS.map(p => `
+  document.getElementById('products-body').innerHTML = PRODUCTS.map(p => `
     <tr>
       <td><code>${p.id}</code></td>
       <td>${p.name}</td>
@@ -270,8 +469,7 @@ function renderProducts() {
 }
 
 function renderTests() {
-  const tbody = document.getElementById('tests-body');
-  tbody.innerHTML = TESTS.map(t => `
+  document.getElementById('tests-body').innerHTML = TESTS.map(t => `
     <tr>
       <td><code>${t.id}</code></td>
       <td>${t.name}</td>
@@ -283,8 +481,7 @@ function renderTests() {
 }
 
 function renderUsers() {
-  const tbody = document.getElementById('users-body');
-  tbody.innerHTML = USERS.map(u => `
+  document.getElementById('users-body').innerHTML = USERS.map(u => `
     <tr>
       <td><code>${u.id}</code></td>
       <td>${u.name}</td>
@@ -294,7 +491,9 @@ function renderUsers() {
   `).join('');
 }
 
-// ── Tab Logic ─────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// TAB LOGIC
+// ═══════════════════════════════════════════════════════════
 
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -305,26 +504,283 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Role Selector ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// ROLE SELECTOR
+// ═══════════════════════════════════════════════════════════
 
-const roleSelect = document.getElementById('role-select');
-const roleBadge  = document.getElementById('role-badge');
-const welcomeMsg = document.getElementById('welcome-msg');
+const roleSelect  = document.getElementById('role-select');
+const roleBadge   = document.getElementById('role-badge');
+const welcomeMsg  = document.getElementById('welcome-msg');
+const rolePanel   = document.getElementById('role-panel');
 
 roleSelect.addEventListener('change', () => {
   const val = roleSelect.value;
   if (!val) {
     roleBadge.style.display = 'none';
     welcomeMsg.style.display = 'none';
+    rolePanel.style.display = 'none';
+    rolePanel.innerHTML = '';
     return;
   }
   roleBadge.textContent = ROLE_LABELS[val];
   roleBadge.style.display = 'inline-block';
   welcomeMsg.textContent = ROLE_WELCOME[val];
   welcomeMsg.style.display = 'block';
+  rolePanel.style.display = 'block';
+  renderRolePanel(val);
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// BRAND REP PANEL
+// ═══════════════════════════════════════════════════════════
+
+function renderBrandRepPanel() {
+  const productOptions = PRODUCTS.map(p =>
+    `<option value="${p.id}">${p.name} (${p.sku})</option>`
+  ).join('');
+
+  const testCheckboxes = TESTS.map(t =>
+    `<label class="checkbox-item">
+      <input type="checkbox" name="test-types" value="${t.id}">
+      ${t.name} (${t.range})
+    </label>`
+  ).join('');
+
+  rolePanel.innerHTML = `
+    <div class="card-header">
+      <h2>📋 Submit Test Order</h2>
+    </div>
+    <form id="order-form">
+      <div class="form-grid">
+        <div>
+          <label for="client-name">Client Name *</label>
+          <input type="text" id="client-name" required placeholder="e.g. Lee & Co Ltd">
+          <div class="field-error" id="err-client-name"></div>
+        </div>
+        <div>
+          <label for="company">Company</label>
+          <input type="text" id="company" placeholder="Optional">
+        </div>
+        <div>
+          <label for="email">Email *</label>
+          <input type="email" id="email" required placeholder="contact@company.com">
+          <div class="field-error" id="err-email"></div>
+        </div>
+        <div>
+          <label for="product">Product *</label>
+          <select id="product" required>
+            <option value="">— Select Product —</option>
+            ${productOptions}
+          </select>
+          <div class="field-error" id="err-product"></div>
+        </div>
+        <div class="full-width">
+          <label>Test Types * (select at least one)</label>
+          <div class="checkbox-group" id="test-checkboxes">
+            ${testCheckboxes}
+          </div>
+          <div class="field-error" id="err-tests"></div>
+        </div>
+        <div>
+          <label for="quantity">Quantity *</label>
+          <input type="number" id="quantity" min="1" value="1" required>
+          <div class="field-error" id="err-quantity"></div>
+        </div>
+        <div class="full-width">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Any special instructions or remarks..."></textarea>
+        </div>
+        <div class="full-width">
+          <button type="submit" class="btn btn-primary">Submit Order</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="orders-list">
+      <div class="order-count" id="order-count"></div>
+      <div id="orders-table"></div>
+    </div>
+  `;
+
+  document.getElementById('order-form').addEventListener('submit', handleOrderSubmit);
+  renderOrdersList();
+}
+
+function handleOrderSubmit(e) {
+  e.preventDefault();
+  clearErrors();
+
+  const clientName = document.getElementById('client-name').value.trim();
+  const company    = document.getElementById('company').value.trim();
+  const email      = document.getElementById('email').value.trim();
+  const productId  = document.getElementById('product').value;
+  const testEls    = document.querySelectorAll('[name="test-types"]:checked');
+  const quantity   = parseInt(document.getElementById('quantity').value, 10);
+  const notes      = document.getElementById('notes').value.trim();
+
+  let valid = true;
+
+  if (!clientName) { showError('client-name', 'Client name is required'); valid = false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('email', 'Valid email required'); valid = false;
+  }
+  if (!productId) { showError('product', 'Please select a product'); valid = false; }
+  if (testEls.length === 0) { showError('tests', 'Select at least one test'); valid = false; }
+  if (!quantity || quantity < 1) { showError('quantity', 'Min quantity is 1'); valid = false; }
+
+  if (!valid) return;
+
+  const selectedTests = Array.from(testEls).map(el => el.value);
+  const product = PRODUCTS.find(p => p.id === productId);
+
+  const order = {
+    id: Date.now(),
+    orderNumber: nextOrderNumber(),
+    clientName,
+    company,
+    email,
+    productId,
+    productName: product.name,
+    productSku: product.sku,
+    testTypes: selectedTests,
+    testNames: selectedTests.map(id => TESTS.find(t => t.id === id).name),
+    quantity,
+    notes,
+    status: 'Pending',
+    submittedDate: new Date().toISOString().split('T')[0],
+  };
+
+  orders.push(order);
+  e.target.reset();
+  renderOrdersList();
+}
+
+function showError(fieldId, msg) {
+  const input = document.getElementById(fieldId);
+  const errEl = document.getElementById('err-' + fieldId);
+  if (input) input.classList.add('error');
+  if (errEl) errEl.textContent = msg;
+}
+
+function clearErrors() {
+  document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+}
+
+function renderOrdersList() {
+  const countEl = document.getElementById('order-count');
+  const tableEl = document.getElementById('orders-table');
+
+  if (orders.length === 0) {
+    countEl.textContent = '';
+    tableEl.innerHTML = '<div class="empty-state">No orders submitted yet. Use the form above to submit your first order.</div>';
+    return;
+  }
+
+  countEl.textContent = `${orders.length} order${orders.length > 1 ? 's' : ''} submitted`;
+
+  tableEl.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Client</th>
+          <th>Product</th>
+          <th>Tests</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${orders.map(o => `
+          <tr class="order-row">
+            <td><code>${o.orderNumber}</code></td>
+            <td>${o.clientName}${o.company ? '<br><small style="color:#94a3b8">'+o.company+'</small>' : ''}</td>
+            <td>${o.productName}</td>
+            <td>${o.testNames.join(', ')}</td>
+            <td>${o.quantity}</td>
+            <td><span class="badge ${STATUS_BADGE[o.status]}">${o.status}</span></td>
+            <td>${o.submittedDate}</td>
+            <td><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})">View</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// ORDER DETAIL MODAL
+// ═══════════════════════════════════════════════════════════
+
+function viewOrder(id) {
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+
+  document.getElementById('modal-title').textContent = `Order ${order.orderNumber}`;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="detail-label">Order #</div>
+    <div class="detail-value"><code>${order.orderNumber}</code></div>
+
+    <div class="detail-label">Client</div>
+    <div class="detail-value">${order.clientName}${order.company ? '<br>' + order.company : ''}<br><a href="mailto:${order.email}">${order.email}</a></div>
+
+    <div class="detail-label">Product</div>
+    <div class="detail-value">${order.productName} (<code>${order.productSku}</code>)</div>
+
+    <div class="detail-label">Tests</div>
+    <div class="detail-value">${order.testNames.join(', ')}</div>
+
+    <div class="detail-label">Quantity</div>
+    <div class="detail-value">${order.quantity}</div>
+
+    <div class="detail-label">Status</div>
+    <div class="detail-value"><span class="badge ${STATUS_BADGE[order.status]}">${order.status}</span></div>
+
+    <div class="detail-label">Submitted</div>
+    <div class="detail-value">${order.submittedDate}</div>
+
+    ${order.notes ? `<div class="detail-label">Notes</div><div class="detail-value" style="grid-column:2">${order.notes}</div>` : ''}
+  `;
+
+  document.getElementById('order-modal').classList.remove('hidden');
+}
+
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('order-modal').classList.add('hidden');
+});
+
+document.getElementById('order-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('order-modal')) {
+    document.getElementById('order-modal').classList.add('hidden');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// ROLE PANEL ROUTER
+// ═══════════════════════════════════════════════════════════
+
+function renderRolePanel(role) {
+  if (role === 'brand_rep') {
+    renderBrandRepPanel();
+  } else {
+    rolePanel.innerHTML = `
+      <div class="card-header">
+        <h2>🔧 ${ROLE_LABELS[role]}</h2>
+      </div>
+      <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+        ${ROLE_WELCOME[role]}<br><br>
+        <em>This panel is implemented in STORY-${role === 'receptionist' ? '4' : role === 'tech' ? '5' : '6'}.</em>
+      </p>
+    `;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
 
 renderProducts();
 renderTests();
