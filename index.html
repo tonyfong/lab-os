@@ -765,6 +765,18 @@ document.getElementById('order-modal').addEventListener('click', (e) => {
 function renderRolePanel(role) {
   if (role === 'brand_rep') {
     renderBrandRepPanel();
+  } else if (role === 'receptionist') {
+    renderReceptionistPanel();
+  } else if (role === 'tech') {
+    rolePanel.innerHTML = `
+      <div class="card-header">
+        <h2>🔧 ${ROLE_LABELS[role]}</h2>
+      </div>
+      <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+        ${ROLE_WELCOME[role]}<br><br>
+        <em>This panel is implemented in STORY-5.</em>
+      </p>
+    `;
   } else {
     rolePanel.innerHTML = `
       <div class="card-header">
@@ -772,9 +784,99 @@ function renderRolePanel(role) {
       </div>
       <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
         ${ROLE_WELCOME[role]}<br><br>
-        <em>This panel is implemented in STORY-${role === 'receptionist' ? '4' : role === 'tech' ? '5' : '6'}.</em>
+        <em>This panel is implemented in STORY-6.</em>
       </p>
     `;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LAB RECEPTIONIST PANEL (STORY-4)
+// ═══════════════════════════════════════════════════════════
+
+function renderReceptionistPanel() {
+  const pendingOrders = orders.filter(o => o.status === 'Pending');
+
+  rolePanel.innerHTML = `
+    <div class="card-header">
+      <h2>📋 Lab Receptionist</h2>
+    </div>
+    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+      ${ROLE_WELCOME['receptionist']}
+    </p>
+    <div id="receptionist-orders-list">
+      <div class="order-count" id="receptionist-order-count"></div>
+      <div id="receptionist-orders-table"></div>
+    </div>
+  `;
+
+  renderReceptionistOrdersList();
+}
+
+function renderReceptionistOrdersList() {
+  const pendingOrders = orders.filter(o => o.status === 'Pending');
+  const countEl = document.getElementById('receptionist-order-count');
+  const tableEl = document.getElementById('receptionist-orders-table');
+
+  if (pendingOrders.length === 0) {
+    countEl.textContent = '';
+    tableEl.innerHTML = '<div class="empty-state">No pending orders to register. Waiting for Brand Reps to submit orders.</div>';
+    return;
+  }
+
+  countEl.textContent = `${pendingOrders.length} pending order${pendingOrders.length > 1 ? 's' : ''}`;
+
+  tableEl.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Client</th>
+          <th>Product</th>
+          <th>Tests</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${pendingOrders.map(o => `
+          <tr class="order-row">
+            <td><code>${o.orderNumber}</code></td>
+            <td>${o.clientName}${o.company ? '<br><small style="color:#94a3b8">'+o.company+'</small>' : ''}</td>
+            <td>${o.productName}</td>
+            <td>${o.testNames.join(', ')}</td>
+            <td>${o.quantity}</td>
+            <td><span class="badge ${STATUS_BADGE[o.status]}">${o.status}</span></td>
+            <td>${o.submittedDate}</td>
+            <td><button class="btn btn-primary btn-sm" onclick="registerSample(${o.id})">Register</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function registerSample(id) {
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+
+  order.status = 'Sample Received';
+  order.registeredDate = new Date().toISOString().split('T')[0];
+
+  renderReceptionistOrdersList();
+
+  // Show confirmation
+  const countEl = document.getElementById('receptionist-order-count');
+  if (countEl) {
+    countEl.style.color = '#166534';
+    countEl.textContent = `Order ${order.orderNumber} registered successfully!`;
+    setTimeout(() => {
+      countEl.style.color = '';
+      const pendingCount = orders.filter(o => o.status === 'Pending').length;
+      countEl.textContent = pendingCount > 0 ? `${pendingCount} pending order${pendingCount > 1 ? 's' : ''}` : '';
+    }, 3000);
   }
 }
 
