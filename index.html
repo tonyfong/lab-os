@@ -260,9 +260,11 @@
 
     .modal-overlay.hidden { display: none; }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .modal { width: 95%; max-height: 95vh; }
       .form-grid { grid-template-columns: 1fr !important; }
+      .modal-form-grid { grid-template-columns: 1fr !important; }
+      .modal-form-grid .full-width { grid-column: 1 !important; }
     }
 
     .modal {
@@ -1182,7 +1184,7 @@ function openTechResultModal(sampleId) {
         ${testRows}
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
       <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Technician *</label>
         <select id="tech-name" required style="width:100%;">
@@ -1194,7 +1196,7 @@ function openTechResultModal(sampleId) {
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Date Tested *</label>
         <input type="date" id="tech-date" value="${today}" required style="width:100%;">
       </div>
-      <div style="grid-column:1/-1;">
+      <div style="grid-column:3;grid-row:1;">
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Notes</label>
         <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:60px;resize:vertical;"></textarea>
       </div>
