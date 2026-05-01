@@ -1135,7 +1135,7 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:1fr 220px 100px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:minmax(150px,1fr) 180px 80px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;">${test.name}</div>
             <div style="font-size:0.75rem;color:#64748b;">${test.method}</div>
@@ -1152,7 +1152,7 @@ function openTechResultModal(sampleId) {
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:1fr 220px 100px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:minmax(150px,1fr) 180px 80px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;">${test.name}</div>
             <div style="font-size:0.75rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
@@ -1461,7 +1461,7 @@ function openDirectorReviewModal(sampleId) {
         <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
         <span style="color:#64748b;">Product</span><strong>${sample.productName}</strong>
         <span style="color:#64748b;">Client</span><strong>${order ? order.clientName : '—'}</strong>
-        ${order && order.company ? `<span style="color:#64748b;">Company</span><strong>${order.company}</strong>` : ''}
+        <span style="color:#64748b;">Company</span><strong>${order && order.company ? order.company : '—'}</strong>
         ${sample.testNames && sample.testNames.length ? `<span style="color:#64748b;">Tests</span><span>${sample.testNames.join(', ')}</span>` : ''}
         <span style="color:#64748b;">Technician</span>${sample.technician || '—'} (${sample.dateTested || '—'})
         ${sample.notes ? `<span style="color:#64748b;">Notes</span><span>${sample.notes}</span>` : ''}
@@ -1482,10 +1482,10 @@ function openDirectorReviewModal(sampleId) {
     <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
       <div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests pending — approval requires all tests passed'}</div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})" style="font-size:0.75rem;padding:0.25rem 0.75rem;">
+        <button type="button" class="btn btn-secondary" onclick="rejectSample(${sample.id})" style="font-size:0.75rem;padding:0.3rem 0.75rem;">
           Reject
         </button>
-        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})" style="font-size:0.75rem;padding:0.25rem 0.75rem;">
+        <button type="button" class="btn btn-primary" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})" style="font-size:0.75rem;padding:0.3rem 0.75rem;">
           Approve All
         </button>
       </div>
