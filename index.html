@@ -781,14 +781,14 @@ function renderRolePanel(role) {
   } else if (role === 'director') {
     renderDirectorPanel();
   } else {
-    rolePanel.innerHTML = \`
+    rolePanel.innerHTML = `
       <div class="card-header">
         <h2>🔧 \${ROLE_LABELS[role]}</h2>
       </div>
       <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
         \${ROLE_WELCOME[role]}
       </p>
-    \`;
+    `;
   }
 }
 
