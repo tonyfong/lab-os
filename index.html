@@ -1479,7 +1479,7 @@ function openDirectorReviewModal(sampleId) {
         <tbody>${resultsRows}</tbody>
       </table>
     </div>
-    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:1rem;border-top:1px solid #e2e8f0;">
       <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})">Reject</button>
       <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled title="All tests must pass"'}' onclick="approveSample(${sample.id})">
         Approve All
