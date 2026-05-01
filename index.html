@@ -381,7 +381,7 @@
 </div>
 
 <footer>
-  LIMS Prototype v0.2 — STORY-3 · Textile &amp; Softline Testing Lab
+  LIMS Prototype v0.3 — STORY-4 · Textile &amp; Softline Testing Lab
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -429,10 +429,19 @@ const STATUS_BADGE = {
 const orders = [];
 let orderCounter = 0;
 
+const samples = [];
+let sampleCounter = 0;
+
 function nextOrderNumber() {
   orderCounter++;
   const year = new Date().getFullYear();
   return `ORD-${year}-${String(orderCounter).padStart(4, '0')}`;
+}
+
+function nextSampleNumber() {
+  sampleCounter++;
+  const year = new Date().getFullYear();
+  return `LAB-${year}-${String(sampleCounter).padStart(4, '0')}`;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -768,89 +777,113 @@ function renderRolePanel(role) {
   } else if (role === 'receptionist') {
     renderReceptionistPanel();
   } else if (role === 'tech') {
-    rolePanel.innerHTML = `
-      <div class="card-header">
-        <h2>🔧 ${ROLE_LABELS[role]}</h2>
-      </div>
-      <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-        ${ROLE_WELCOME[role]}<br><br>
-        <em>This panel is implemented in STORY-5.</em>
-      </p>
-    `;
+    renderTechPanel();
+  } else if (role === 'director') {
+    renderDirectorPanel();
   } else {
-    rolePanel.innerHTML = `
+    rolePanel.innerHTML = \`
       <div class="card-header">
-        <h2>🔧 ${ROLE_LABELS[role]}</h2>
+        <h2>🔧 \${ROLE_LABELS[role]}</h2>
       </div>
       <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-        ${ROLE_WELCOME[role]}<br><br>
-        <em>This panel is implemented in STORY-6.</em>
+        \${ROLE_WELCOME[role]}
       </p>
-    `;
+    \`;
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// LAB RECEPTIONIST PANEL (STORY-4)
+// ═══════════════════════════════════════════════════════════
+// RECEPTIONIST PANEL
 // ═══════════════════════════════════════════════════════════
 
 function renderReceptionistPanel() {
+  renderPendingOrders();
+}
+
+function renderPendingOrders() {
   const pendingOrders = orders.filter(o => o.status === 'Pending');
 
   rolePanel.innerHTML = `
     <div class="card-header">
-      <h2>📋 Lab Receptionist</h2>
+      <h2>📥 Pending Orders</h2>
+      <span style="color:#64748b;font-size:0.8rem;">${pendingOrders.length} order${pendingOrders.length !== 1 ? 's' : ''}</span>
     </div>
-    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-      ${ROLE_WELCOME['receptionist']}
-    </p>
-    <div id="receptionist-orders-list">
-      <div class="order-count" id="receptionist-order-count"></div>
-      <div id="receptionist-orders-table"></div>
+    ${pendingOrders.length === 0 ? `
+      <div class="empty-state">No pending orders. Orders from Brand Reps will appear here.</div>
+    ` : `
+      <table>
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Client</th>
+            <th>Product</th>
+            <th>Tests</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${pendingOrders.map(o => `
+            <tr>
+              <td><code>${o.orderNumber}</code></td>
+              <td>${o.clientName}</td>
+              <td>${o.productName}</td>
+              <td style="font-size:0.8rem;color:#64748b;">${o.testNames.join(', ')}</td>
+              <td>${o.submittedDate}</td>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="openSampleRegModal(${o.id})">
+                  Register Sample
+                </button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `}
+
+    <div id="lab-queue-section" style="margin-top:2rem;">
+      <div class="card-header">
+        <h2>🔬 Lab Queue</h2>
+        <span style="color:#64748b;font-size:0.8rem;">${samples.length} sample${samples.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div id="lab-queue-content"></div>
     </div>
   `;
 
-  renderReceptionistOrdersList();
+  renderLabQueue();
 }
 
-function renderReceptionistOrdersList() {
-  const pendingOrders = orders.filter(o => o.status === 'Pending');
-  const countEl = document.getElementById('receptionist-order-count');
-  const tableEl = document.getElementById('receptionist-orders-table');
+function renderLabQueue() {
+  const queueContent = document.getElementById('lab-queue-content');
+  if (!queueContent) return;
 
-  if (pendingOrders.length === 0) {
-    countEl.textContent = '';
-    tableEl.innerHTML = '<div class="empty-state">No pending orders to register. Waiting for Brand Reps to submit orders.</div>';
+  if (samples.length === 0) {
+    queueContent.innerHTML = '<div class="empty-state">No samples registered yet.</div>';
     return;
   }
 
-  countEl.textContent = `${pendingOrders.length} pending order${pendingOrders.length > 1 ? 's' : ''}`;
-
-  tableEl.innerHTML = `
+  queueContent.innerHTML = `
     <table>
       <thead>
         <tr>
+          <th>Lab #</th>
           <th>Order #</th>
-          <th>Client</th>
           <th>Product</th>
           <th>Tests</th>
-          <th>Qty</th>
           <th>Status</th>
-          <th>Date</th>
-          <th></th>
+          <th>Date Received</th>
         </tr>
       </thead>
       <tbody>
-        ${pendingOrders.map(o => `
-          <tr class="order-row">
-            <td><code>${o.orderNumber}</code></td>
-            <td>${o.clientName}${o.company ? '<br><small style="color:#94a3b8">'+o.company+'</small>' : ''}</td>
-            <td>${o.productName}</td>
-            <td>${o.testNames.join(', ')}</td>
-            <td>${o.quantity}</td>
-            <td><span class="badge ${STATUS_BADGE[o.status]}">${o.status}</span></td>
-            <td>${o.submittedDate}</td>
-            <td><button class="btn btn-primary btn-sm" onclick="registerSample(${o.id})">Register</button></td>
+        ${samples.map(s => `
+          <tr>
+            <td><code>${s.sampleNumber}</code></td>
+            <td><code>${s.orderNumber}</code></td>
+            <td>${s.productName}</td>
+            <td style="font-size:0.8rem;color:#64748b;">${s.testNames.join(', ')}</td>
+            <td><span class="badge badge-received">${s.status}</span></td>
+            <td>${s.dateReceived}</td>
           </tr>
         `).join('')}
       </tbody>
@@ -858,29 +891,140 @@ function renderReceptionistOrdersList() {
   `;
 }
 
-function registerSample(id) {
-  const order = orders.find(o => o.id === id);
+// Sample Registration Modal
+let currentRegOrderId = null;
+
+function openSampleRegModal(orderId) {
+  const order = orders.find(o => o.id === orderId);
   if (!order) return;
 
-  order.status = 'Sample Received';
-  order.registeredDate = new Date().toISOString().split('T')[0];
+  currentRegOrderId = orderId;
+  const sampleId = nextSampleNumber();
+  const today = new Date().toISOString().split('T')[0];
+  const receptionistUsers = USERS.filter(u => u.role === 'Lab Receptionist');
 
-  renderReceptionistOrdersList();
+  document.getElementById('modal-title').textContent = 'Register Sample';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      <div>
+        <label>Sample ID</label>
+        <input type="text" id="reg-sample-id" value="${sampleId}" readonly style="background:#f1f5f9">
+      </div>
+      <div>
+        <label>Date Received *</label>
+        <input type="date" id="reg-date-received" value="${today}" required>
+      </div>
+      <div class="full-width">
+        <label>Received By *</label>
+        <select id="reg-received-by" required>
+          <option value="">— Select —</option>
+          ${receptionistUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
+        </select>
+      </div>
+      <div class="full-width">
+        <label>Sample Description</label>
+        <input type="text" id="reg-description" placeholder="Defaults to product name">
+      </div>
+      <div class="full-width">
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:0.5rem 0;">
+        <p style="font-size:0.8rem;color:#64748b;margin-bottom:0.5rem;">Order Info:</p>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:0.25rem 1rem;font-size:0.875rem;">
+          <span style="color:#64748b;">Order</span><strong>${order.orderNumber}</strong>
+          <span style="color:#64748b;">Client</span>${order.clientName}
+          <span style="color:#64748b;">Product</span>${order.productName}
+          <span style="color:#64748b;">Tests</span>${order.testNames.join(', ')}
+        </div>
+      </div>
+      <div class="full-width" style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="submitSampleRegistration()">Register Sample</button>
+      </div>
+    </div>
+  `;
 
-  // Show confirmation
-  const countEl = document.getElementById('receptionist-order-count');
-  if (countEl) {
-    countEl.style.color = '#166534';
-    countEl.textContent = `Order ${order.orderNumber} registered successfully!`;
-    setTimeout(() => {
-      countEl.style.color = '';
-      const pendingCount = orders.filter(o => o.status === 'Pending').length;
-      countEl.textContent = pendingCount > 0 ? `${pendingCount} pending order${pendingCount > 1 ? 's' : ''}` : '';
-    }, 3000);
+  document.getElementById('order-modal').classList.remove('hidden');
+}
+
+function submitSampleRegistration() {
+  const receivedBy = document.getElementById('reg-received-by').value;
+  const dateReceived = document.getElementById('reg-date-received').value;
+  const description = document.getElementById('reg-description').value.trim();
+
+  if (!receivedBy || !dateReceived) {
+    alert('Please fill in required fields');
+    return;
   }
+
+  const order = orders.find(o => o.id === currentRegOrderId);
+  if (!order) return;
+
+  const receiver = USERS.find(u => u.id === receivedBy);
+  const sampleNumber = document.getElementById('reg-sample-id').value;
+
+  const sample = {
+    id: Date.now(),
+    sampleNumber,
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    productName: order.productName,
+    productSku: order.productSku,
+    testNames: order.testNames,
+    description: description || order.productName,
+    dateReceived,
+    receivedBy: receiver.name,
+    receivedById: receivedBy,
+    status: 'Sample Received',
+  };
+
+  samples.push(sample);
+
+  // Update order status
+  order.status = 'Sample Received';
+  order.sampleId = sample.id;
+  order.sampleNumber = sampleNumber;
+
+  closeModal();
+  renderReceptionistPanel();
+}
+
+function closeModal() {
+  document.getElementById('order-modal').classList.add('hidden');
+  currentRegOrderId = null;
 }
 
 // ═══════════════════════════════════════════════════════════
+// TECH PANEL (placeholder for STORY-5)
+// ═══════════════════════════════════════════════════════════
+
+function renderTechPanel() {
+  rolePanel.innerHTML = `
+    <div class="card-header">
+      <h2>🔬 ${ROLE_LABELS['tech']}</h2>
+    </div>
+    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+      ${ROLE_WELCOME['tech']}<br><br>
+      <em>This panel is implemented in STORY-5.</em>
+    </p>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// DIRECTOR PANEL (placeholder for STORY-6)
+// ═══════════════════════════════════════════════════════════
+
+function renderDirectorPanel() {
+  rolePanel.innerHTML = `
+    <div class="card-header">
+      <h2>📊 ${ROLE_LABELS['director']}</h2>
+    </div>
+    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+      ${ROLE_WELCOME['director']}<br><br>
+      <em>This panel is implemented in STORY-6.</em>
+    </p>
+  `;
+}
+
+
 // INIT
 // ═══════════════════════════════════════════════════════════
 
