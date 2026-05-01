@@ -774,16 +774,21 @@ document.getElementById('order-modal').addEventListener('click', (e) => {
 function renderRolePanel(role) {
   if (role === 'brand_rep') {
     renderBrandRepPanel();
+  } else if (role === 'receptionist') {
+    renderReceptionistPanel();
+  } else if (role === 'tech') {
+    renderTechPanel();
+  } else if (role === 'director') {
+    renderDirectorPanel();
   } else {
-    rolePanel.innerHTML = `
+    rolePanel.innerHTML = \`
       <div class="card-header">
-        <h2>🔧 ${ROLE_LABELS[role]}</h2>
+        <h2>🔧 \${ROLE_LABELS[role]}</h2>
       </div>
       <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-        ${ROLE_WELCOME[role]}<br><br>
-        <em>This panel is implemented in STORY-${role === 'receptionist' ? '4' : role === 'tech' ? '5' : '6'}.</em>
+        \${ROLE_WELCOME[role]}
       </p>
-    `;
+    \`;
   }
 }
 
