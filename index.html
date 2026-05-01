@@ -1133,7 +1133,7 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:0.75rem;align-items:center;padding:0.5rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:1fr minmax(150px,1fr) 80px;gap:0.75rem;align-items:center;padding:0.5rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;">${test.name}</div>
             <div style="font-size:0.75rem;color:#64748b;">${test.method}</div>
@@ -1150,7 +1150,7 @@ function openTechResultModal(sampleId) {
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:1fr 1fr 80px;gap:0.75rem;align-items:center;padding:0.5rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:1fr minmax(150px,1fr) 80px;gap:0.75rem;align-items:center;padding:0.5rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;">${test.name}</div>
             <div style="font-size:0.75rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
@@ -1175,31 +1175,37 @@ function openTechResultModal(sampleId) {
       </div>
     </div>
 
-    <label style="font-weight:500;margin-bottom:0.5rem;display:block;">Test Results</label>
-    <div style="background:#f8fafc;border-radius:6px;padding:0.5rem 0.75rem;margin-bottom:1rem;">
-      ${testRows}
+    <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+      <div style="flex:1;min-width:0;">
+        <label style="font-weight:500;margin-bottom:0.5rem;display:block;">Test Results</label>
+        <div style="background:#f8fafc;border-radius:6px;padding:0.5rem 0.75rem;">
+          ${testRows}
+        </div>
+      </div>
+      <div style="width:220px;flex-shrink:0;">
+        <label style="font-weight:500;margin-bottom:0.5rem;display:block;">Technician Info</label>
+        <div style="background:#f8fafc;border-radius:6px;padding:0.75rem;display:flex;flex-direction:column;gap:0.75rem;">
+          <div>
+            <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Technician *</label>
+            <select id="tech-name" required style="width:100%;">
+              <option value="">— Select —</option>
+              ${techUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Date Tested *</label>
+            <input type="date" id="tech-date" value="${today}" required style="width:100%;">
+          </div>
+          <div>
+            <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Notes</label>
+            <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:60px;resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="form-grid" style="grid-template-columns:1fr;">
-      <div>
-        <label>Technician *</label>
-        <select id="tech-name" required>
-          <option value="">— Select —</option>
-          ${techUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
-        </select>
-      </div>
-      <div>
-        <label>Date Tested *</label>
-        <input type="date" id="tech-date" value="${today}" required>
-      </div>
-      <div>
-        <label>Notes</label>
-        <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:80px;"></textarea>
-      </div>
-      <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="closeTechModal()">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm" onclick="submitTechResults()">Submit Results</button>
-      </div>
+    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
+      <button type="button" class="btn btn-secondary btn-sm" onclick="closeTechModal()">Cancel</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="submitTechResults()">Submit Results</button>
     </div>
   `;
 
