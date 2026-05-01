@@ -255,7 +255,7 @@
       border-radius: 10px;
       padding: 1.5rem;
       width: 90%;
-      max-width: 560px;
+      max-width: 800px;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
@@ -294,6 +294,149 @@
     .detail-value { color: #1e293b; }
 
     .detail-value .badge { margin-right: 0.25rem; }
+
+    /* ── Tech Panel Result Entry ── */
+    .tech-samples-table {
+      margin-top: 1rem;
+    }
+
+    .tech-samples-table th { white-space: nowrap; }
+
+    .result-entry-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 0.5rem 0.75rem;
+      align-items: start;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .result-entry-grid:last-child { border-bottom: none; }
+
+    .result-entry-grid .form-group { margin-bottom: 0; }
+
+    .result-entry-grid label {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 0.25rem;
+    }
+
+    .result-entry-grid input,
+    .result-entry-grid select {
+      font-size: 0.875rem;
+      max-width: 100%;
+      padding: 0.375rem 0.5rem;
+    }
+
+    .pass-badge {
+      display: inline-block;
+      padding: 0.375rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .pass-badge.pass { background: #dcfce7; color: #166534; }
+    .pass-badge.fail { background: #fee2e2; color: #991b1b; }
+    .pass-badge.pending { background: #fef9c3; color: #854d0e; }
+
+    /* ── Director Panel ── */
+    .director-order-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      background: white;
+    }
+
+    .director-order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 1rem;
+    }
+
+    .director-order-header h3 {
+      font-size: 0.95rem;
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .director-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem 1.5rem;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border-radius: 6px;
+    }
+
+    .director-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
+    .director-meta-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+    .director-meta-value { color: #1e293b; font-weight: 500; }
+
+    .director-results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .director-results-table th {
+      background: #f1f5f9;
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+    }
+
+    .director-results-table td {
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    /* ── Modal Action Buttons ── */
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-approve {
+      background: #16a34a;
+      color: white;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-approve:hover { background: #15803d; }
+
+    .btn-reject {
+      background: #dc2626;
+      color: white;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-reject:hover { background: #b91c1c; }
 
     footer {
       text-align: center;
@@ -793,7 +936,6 @@ function renderRolePanel(role) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════
 // RECEPTIONIST PANEL
 // ═══════════════════════════════════════════════════════════
 
@@ -804,14 +946,14 @@ function renderReceptionistPanel() {
 function renderPendingOrders() {
   const pendingOrders = orders.filter(o => o.status === 'Pending');
 
-  rolePanel.innerHTML = `
+  rolePanel.innerHTML = \`
     <div class="card-header">
       <h2>📥 Pending Orders</h2>
-      <span style="color:#64748b;font-size:0.8rem;">${pendingOrders.length} order${pendingOrders.length !== 1 ? 's' : ''}</span>
+      <span style="color:#64748b;font-size:0.8rem;">\${pendingOrders.length} order\${pendingOrders.length !== 1 ? 's' : ''}</span>
     </div>
-    ${pendingOrders.length === 0 ? `
+    \${pendingOrders.length === 0 ? \`
       <div class="empty-state">No pending orders. Orders from Brand Reps will appear here.</div>
-    ` : `
+    \` : \`
       <table>
         <thead>
           <tr>
@@ -824,32 +966,32 @@ function renderPendingOrders() {
           </tr>
         </thead>
         <tbody>
-          ${pendingOrders.map(o => `
+          \${pendingOrders.map(o => \`
             <tr>
-              <td><code>${o.orderNumber}</code></td>
-              <td>${o.clientName}</td>
-              <td>${o.productName}</td>
-              <td style="font-size:0.8rem;color:#64748b;">${o.testNames.join(', ')}</td>
-              <td>${o.submittedDate}</td>
+              <td><code>\${o.orderNumber}</code></td>
+              <td>\${o.clientName}</td>
+              <td>\${o.productName}</td>
+              <td style="font-size:0.8rem;color:#64748b;">\${o.testNames.join(', ')}</td>
+              <td>\${o.submittedDate}</td>
               <td>
-                <button class="btn btn-primary btn-sm" onclick="openSampleRegModal(${o.id})">
+                <button class="btn btn-primary btn-sm" onclick="openSampleRegModal(\${o.id})">
                   Register Sample
                 </button>
               </td>
             </tr>
-          `).join('')}
+          \`).join('')}
         </tbody>
       </table>
-    `}
+    \`}
 
     <div id="lab-queue-section" style="margin-top:2rem;">
       <div class="card-header">
         <h2>🔬 Lab Queue</h2>
-        <span style="color:#64748b;font-size:0.8rem;">${samples.length} sample${samples.length !== 1 ? 's' : ''}</span>
+        <span style="color:#64748b;font-size:0.8rem;">\${samples.length} sample\${samples.length !== 1 ? 's' : ''}</span>
       </div>
       <div id="lab-queue-content"></div>
     </div>
-  `;
+  \`;
 
   renderLabQueue();
 }
@@ -863,7 +1005,7 @@ function renderLabQueue() {
     return;
   }
 
-  queueContent.innerHTML = `
+  queueContent.innerHTML = \`
     <table>
       <thead>
         <tr>
@@ -876,19 +1018,19 @@ function renderLabQueue() {
         </tr>
       </thead>
       <tbody>
-        ${samples.map(s => `
+        \${samples.map(s => \`
           <tr>
-            <td><code>${s.sampleNumber}</code></td>
-            <td><code>${s.orderNumber}</code></td>
-            <td>${s.productName}</td>
-            <td style="font-size:0.8rem;color:#64748b;">${s.testNames.join(', ')}</td>
-            <td><span class="badge badge-received">${s.status}</span></td>
-            <td>${s.dateReceived}</td>
+            <td><code>\${s.sampleNumber}</code></td>
+            <td><code>\${s.orderNumber}</code></td>
+            <td>\${s.productName}</td>
+            <td style="font-size:0.8rem;color:#64748b;">\${s.testNames.join(', ')}</td>
+            <td><span class="badge badge-received">\${s.status}</span></td>
+            <td>\${s.dateReceived}</td>
           </tr>
-        `).join('')}
+        \`).join('')}
       </tbody>
     </table>
-  `;
+  \`;
 }
 
 // Sample Registration Modal
@@ -904,21 +1046,21 @@ function openSampleRegModal(orderId) {
   const receptionistUsers = USERS.filter(u => u.role === 'Lab Receptionist');
 
   document.getElementById('modal-title').textContent = 'Register Sample';
-  document.getElementById('modal-body').innerHTML = `
+  document.getElementById('modal-body').innerHTML = \`
     <div class="form-grid">
       <div>
         <label>Sample ID</label>
-        <input type="text" id="reg-sample-id" value="${sampleId}" readonly style="background:#f1f5f9">
+        <input type="text" id="reg-sample-id" value="\${sampleId}" readonly style="background:#f1f5f9">
       </div>
       <div>
         <label>Date Received *</label>
-        <input type="date" id="reg-date-received" value="${today}" required>
+        <input type="date" id="reg-date-received" value="\${today}" required>
       </div>
       <div class="full-width">
         <label>Received By *</label>
         <select id="reg-received-by" required>
           <option value="">— Select —</option>
-          ${receptionistUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
+          \${receptionistUsers.map(u => \`<option value="\${u.id}">\${u.name}</option>\`).join('')}
         </select>
       </div>
       <div class="full-width">
@@ -929,10 +1071,10 @@ function openSampleRegModal(orderId) {
         <hr style="border:none;border-top:1px solid #e2e8f0;margin:0.5rem 0;">
         <p style="font-size:0.8rem;color:#64748b;margin-bottom:0.5rem;">Order Info:</p>
         <div style="display:grid;grid-template-columns:120px 1fr;gap:0.25rem 1rem;font-size:0.875rem;">
-          <span style="color:#64748b;">Order</span><strong>${order.orderNumber}</strong>
-          <span style="color:#64748b;">Client</span>${order.clientName}
-          <span style="color:#64748b;">Product</span>${order.productName}
-          <span style="color:#64748b;">Tests</span>${order.testNames.join(', ')}
+          <span style="color:#64748b;">Order</span><strong>\${order.orderNumber}</strong>
+          <span style="color:#64748b;">Client</span>\${order.clientName}
+          <span style="color:#64748b;">Product</span>\${order.productName}
+          <span style="color:#64748b;">Tests</span>\${order.testNames.join(', ')}
         </div>
       </div>
       <div class="full-width" style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;">
@@ -940,7 +1082,7 @@ function openSampleRegModal(orderId) {
         <button type="button" class="btn btn-primary" onclick="submitSampleRegistration()">Register Sample</button>
       </div>
     </div>
-  `;
+  \`;
 
   document.getElementById('order-modal').classList.remove('hidden');
 }
@@ -974,6 +1116,7 @@ function submitSampleRegistration() {
     receivedBy: receiver.name,
     receivedById: receivedBy,
     status: 'Sample Received',
+    results: [],
   };
 
   samples.push(sample);
@@ -993,38 +1136,450 @@ function closeModal() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TECH PANEL (placeholder for STORY-5)
+// TECH PANEL — STORY-5: Enter Test Results
 // ═══════════════════════════════════════════════════════════
 
 function renderTechPanel() {
-  rolePanel.innerHTML = `
+  const readySamples = samples.filter(s =>
+    s.status === 'Sample Received' || s.status === 'Testing' || s.status === 'Ready for Review'
+  );
+
+  const technicianUsers = USERS.filter(u => u.role === 'Lab Technician');
+
+  if (readySamples.length === 0) {
+    rolePanel.innerHTML = \`
+      <div class="card-header">
+        <h2>🔬 \${ROLE_LABELS['tech']}</h2>
+      </div>
+      <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+        \${ROLE_WELCOME['tech']}
+      </p>
+      <div class="empty-state" style="margin-top:1rem;">
+        No samples ready for testing. Samples registered by the Lab Receptionist will appear here.
+      </div>
+    \`;
+    return;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+
+  rolePanel.innerHTML = \`
     <div class="card-header">
-      <h2>🔬 ${ROLE_LABELS['tech']}</h2>
+      <h2>🔬 \${ROLE_LABELS['tech']}</h2>
+      <span style="color:#64748b;font-size:0.8rem;">\${readySamples.length} sample\${readySamples.length !== 1 ? 's' : ''} pending</span>
     </div>
-    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-      ${ROLE_WELCOME['tech']}<br><br>
-      <em>This panel is implemented in STORY-5.</em>
+    <p style="color:#64748b;font-size:0.9rem;margin-bottom:1rem;">
+      \${ROLE_WELCOME['tech']}
     </p>
-  `;
+
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      \${readySamples.map(s => {
+        const order = orders.find(o => o.id === s.orderId);
+        const testNames = s.testNames || (order ? order.testNames : []);
+        const existingResult = (s.results && s.results.length > 0) ? s.results[0] : null;
+
+        return \`
+        <div class="director-order-card">
+          <div class="director-order-header">
+            <h3>\${s.sampleNumber} — \${s.productName}</h3>
+            <span class="badge badge-\${s.status === 'Sample Received' ? 'received' : s.status === 'Testing' ? 'testing' : 'review'}">\${s.status}</span>
+          </div>
+          <div class="director-meta">
+            <div class="director-meta-item">
+              <span class="director-meta-label">Order #</span>
+              <span class="director-meta-value"><code>\${s.orderNumber}</code></span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Client</span>
+              <span class="director-meta-value">\${order ? order.clientName : '—'}</span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Tests</span>
+              <span class="director-meta-value">\${testNames.join(', ')}</span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Date Received</span>
+              <span class="director-meta-value">\${s.dateReceived}</span>
+            </div>
+          </div>
+
+          \${testNames.map((testName, idx) => {
+            const test = TESTS.find(t => t.name === testName) || TESTS[0];
+            const res = (s.results && s.results[idx]) ? s.results[idx] : null;
+            const passClass = !res ? 'pending' : (res.measured !== '' && parseFloat(res.measured) >= 3.0 ? 'pass' : 'fail');
+            const passLabel = !res ? 'Pending' : (res.measured !== '' && parseFloat(res.measured) >= 3.0 ? 'Pass' : 'Fail');
+
+            return \`
+            <div class="result-entry-grid" id="result-grid-\${s.id}-\${idx}">
+              <div class="form-group">
+                <label>Test</label>
+                <input type="text" value="\${testName}" readonly style="background:#f1f5f9;font-size:0.875rem;">
+              </div>
+              <div class="form-group">
+                <label>Measured Value *</label>
+                <input type="number" step="any" id="measured-\${s.id}-\${idx}"
+                  placeholder="e.g. 4.5"
+                  value="\${res ? res.measured : ''}"
+                  style="\${passClass === 'fail' && res ? 'border-color:#dc2626;' : ''}">
+              </div>
+              <div class="form-group">
+                <label>Unit</label>
+                <input type="text" value="\${test.unit}" readonly style="background:#f1f5f9;font-size:0.875rem;">
+              </div>
+              <div class="form-group">
+                <label>Pass / Fail</label>
+                <span class="pass-badge \${passClass}" id="pass-badge-\${s.id}-\${idx}" style="display:inline-block;padding:0.375rem 0.75rem;">\${passLabel}</span>
+              </div>
+            </div>
+            <div class="result-entry-grid" style="border-bottom:none;padding-top:0;">
+              <div class="form-group">
+                <label>Technician *</label>
+                <select id="tech-\${s.id}-\${idx}" style="max-width:100%;font-size:0.875rem;">
+                  <option value="">— Select —</option>
+                  \${technicianUsers.map(u => \`<option value="\${u.id}"\${res && res.techId === u.id ? ' selected' : ''}>\${u.name}</option>\`).join('')}
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="date-\${s.id}-\${idx}" value="\${res ? res.date : today}" style="max-width:100%;font-size:0.875rem;">
+              </div>
+              <div class="form-group" style="grid-column:3 / -1;">
+                <label>Notes</label>
+                <input type="text" id="notes-\${s.id}-\${idx}" value="\${res ? res.notes : ''}" placeholder="Optional notes..." style="max-width:100%;font-size:0.875rem;">
+              </div>
+            </div>
+            \`;
+          }).join('')}
+
+          <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+            <button class="btn btn-secondary btn-sm" onclick="saveTechResults('\${s.id}', \${testNames.length})">Save Results</button>
+            <button class="btn btn-primary btn-sm" onclick="submitForReview('\${s.id}', \${testNames.length})">Submit for Review</button>
+          </div>
+        </div>
+        \`;
+      }).join('')}
+    </div>
+  \`;
+
+  // Wire up auto-calculate pass/fail on input change
+  readySamples.forEach(s => {
+    s.testNames.forEach((_, idx) => {
+      const input = document.getElementById(\`measured-\${s.id}-\${idx}\`);
+      if (input) {
+        input.addEventListener('input', () => updatePassBadge(s.id, idx, input.value));
+      }
+    });
+  });
+}
+
+function updatePassBadge(sampleId, idx, value) {
+  const badge = document.getElementById(\`pass-badge-\${sampleId}-\${idx}\`);
+  if (!badge) return;
+  if (!value) {
+    badge.className = 'pass-badge pending';
+    badge.textContent = 'Pending';
+  } else {
+    const num = parseFloat(value);
+    const pass = !isNaN(num) && num >= 3.0;
+    badge.className = \`pass-badge \${pass ? 'pass' : 'fail'}\`;
+    badge.textContent = pass ? 'Pass' : 'Fail';
+  }
+}
+
+function saveTechResults(sampleId, testCount) {
+  const sample = samples.find(s => s.id === parseInt(sampleId));
+  if (!sample) return;
+
+  if (!sample.results) sample.results = [];
+
+  const techSelect = document.getElementById(\`tech-\${sampleId}-0\`);
+  const techId = techSelect ? techSelect.value : '';
+
+  if (!techId) {
+    alert('Please select a technician before saving.');
+    return;
+  }
+
+  const newResults = [];
+  let valid = true;
+
+  for (let i = 0; i < testCount; i++) {
+    const measured = document.getElementById(\`measured-\${sampleId}-\${i}\`).value;
+    const techId = document.getElementById(\`tech-\${sampleId}-\${i}\`).value;
+    const date = document.getElementById(\`date-\${sampleId}-\${i}\`).value;
+    const notes = document.getElementById(\`notes-\${sampleId}-\${i}\`).value;
+
+    if (!techId) { alert('Please select a technician for all tests.'); valid = false; break; }
+    if (measured === '') { alert('Please enter measured values for all tests.'); valid = false; break; }
+
+    newResults.push({ measured, techId, date, notes });
+  }
+
+  if (!valid) return;
+
+  sample.results = newResults;
+  sample.status = 'Testing';
+
+  const order = orders.find(o => o.id === sample.orderId);
+  if (order) order.status = 'Testing';
+
+  renderTechPanel();
+}
+
+function submitForReview(sampleId, testCount) {
+  const sample = samples.find(s => s.id === parseInt(sampleId));
+  if (!sample) return;
+
+  const techSelect = document.getElementById(\`tech-\${sampleId}-0\`);
+  const techId = techSelect ? techSelect.value : '';
+
+  if (!techId) {
+    alert('Please select a technician before submitting.');
+    return;
+  }
+
+  const newResults = [];
+  for (let i = 0; i < testCount; i++) {
+    const measured = document.getElementById(\`measured-\${sampleId}-\${i}\`).value;
+    const techId = document.getElementById(\`tech-\${sampleId}-\${i}\`).value;
+    const date = document.getElementById(\`date-\${sampleId}-\${i}\`).value;
+    const notes = document.getElementById(\`notes-\${sampleId}-\${i}\`).value;
+    newResults.push({ measured, techId, date, notes });
+  }
+
+  sample.results = newResults;
+  sample.status = 'Ready for Review';
+
+  const order = orders.find(o => o.id === sample.orderId);
+  if (order) order.status = 'Ready for Review';
+
+  renderTechPanel();
 }
 
 // ═══════════════════════════════════════════════════════════
-// DIRECTOR PANEL (placeholder for STORY-6)
+// DIRECTOR PANEL — STORY-6: Approve Results & Generate Report
 // ═══════════════════════════════════════════════════════════
 
 function renderDirectorPanel() {
-  rolePanel.innerHTML = `
+  const reviewSamples = samples.filter(s =>
+    s.status === 'Ready for Review' || s.status === 'Approved' || s.status === 'Report Ready'
+  );
+
+  if (reviewSamples.length === 0) {
+    rolePanel.innerHTML = \`
+      <div class="card-header">
+        <h2>📊 \${ROLE_LABELS['director']}</h2>
+      </div>
+      <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
+        \${ROLE_WELCOME['director']}
+      </p>
+      <div class="empty-state" style="margin-top:1rem;">
+        No samples ready for review. Samples submitted by Lab Technicians will appear here.
+      </div>
+    \`;
+    return;
+  }
+
+  rolePanel.innerHTML = \`
     <div class="card-header">
-      <h2>📊 ${ROLE_LABELS['director']}</h2>
+      <h2>📊 \${ROLE_LABELS['director']}</h2>
+      <span style="color:#64748b;font-size:0.8rem;">\${reviewSamples.length} sample\${reviewSamples.length !== 1 ? 's' : ''} pending review</span>
     </div>
-    <p style="color:#64748b;font-size:0.9rem;margin-top:0.5rem;">
-      ${ROLE_WELCOME['director']}<br><br>
-      <em>This panel is implemented in STORY-6.</em>
+    <p style="color:#64748b;font-size:0.9rem;margin-bottom:1rem;">
+      \${ROLE_WELCOME['director']}
     </p>
-  `;
+
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      \${reviewSamples.map(s => {
+        const order = orders.find(o => o.id === s.orderId);
+        const testNames = s.testNames || (order ? order.testNames : []);
+
+        return \`
+        <div class="director-order-card" id="director-card-\${s.id}">
+          <div class="director-order-header">
+            <h3>\${s.sampleNumber} — \${s.productName}</h3>
+            <span class="badge badge-\${s.status === 'Ready for Review' ? 'review' : s.status === 'Approved' ? 'approved' : 'ready'}">\${s.status}</span>
+          </div>
+          <div class="director-meta">
+            <div class="director-meta-item">
+              <span class="director-meta-label">Order #</span>
+              <span class="director-meta-value"><code>\${s.orderNumber}</code></span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Client</span>
+              <span class="director-meta-value">\${order ? order.clientName : '—'}</span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Tests</span>
+              <span class="director-meta-value">\${testNames.join(', ')}</span>
+            </div>
+            <div class="director-meta-item">
+              <span class="director-meta-label">Date Received</span>
+              <span class="director-meta-value">\${s.dateReceived}</span>
+            </div>
+          </div>
+
+          <table class="director-results-table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Measured</th>
+                <th>Unit</th>
+                <th>Range</th>
+                <th>Result</th>
+                <th>Technician</th>
+                <th>Date</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              \${(s.results || []).map((r, i) => {
+                const testName = testNames[i] || TESTS[i] ? (TESTS[i] ? TESTS[i].name : testNames[i]) : \`Test \${i+1}\`;
+                const test = TESTS.find(t => t.name === testName) || TESTS[0];
+                const num = parseFloat(r.measured);
+                const isPass = !isNaN(num) && num >= 3.0;
+                const techUser = USERS.find(u => u.id === r.techId);
+
+                return \`
+                <tr>
+                  <td>\${testName}</td>
+                  <td><strong>\${r.measured}</strong></td>
+                  <td>\${test.unit}</td>
+                  <td>\${test.range}</td>
+                  <td><span class="pass-badge \${isPass ? 'pass' : 'fail'}">\${isPass ? 'Pass' : 'Fail'}</span></td>
+                  <td>\${techUser ? techUser.name : '—'}</td>
+                  <td>\${r.date || '—'}</td>
+                  <td style="color:#64748b;font-size:0.8rem;">\${r.notes || '—'}</td>
+                </tr>
+                \`;
+              }).join('')}
+            </tbody>
+          </table>
+
+          \${s.status === 'Ready for Review' ? \`
+          <div class="modal-actions" style="border-top:1px solid #e2e8f0;padding-top:1rem;margin-top:0.5rem;">
+            <button class="btn-reject" onclick="rejectSample('\${s.id}')">Reject & Return</button>
+            <button class="btn-approve" onclick="approveSample('\${s.id}')">Approve All</button>
+          </div>
+          \` : s.status === 'Approved' || s.status === 'Report Ready' ? \`
+          <div class="modal-actions" style="border-top:1px solid #e2e8f0;padding-top:1rem;margin-top:0.5rem;">
+            <button class="btn btn-primary" onclick="generateReport('\${s.id}')">Download PDF Report</button>
+          </div>
+          \` : ''}
+        </div>
+        \`;
+      }).join('')}
+    </div>
+  \`;
 }
 
+function rejectSample(sampleId) {
+  const sample = samples.find(s => s.id === parseInt(sampleId));
+  if (!sample) return;
+  sample.status = 'Testing';
+  const order = orders.find(o => o.id === sample.orderId);
+  if (order) order.status = 'Testing';
+  renderDirectorPanel();
+}
 
+function approveSample(sampleId) {
+  const sample = samples.find(s => s.id === parseInt(sampleId));
+  if (!sample) return;
+  sample.status = 'Approved';
+  const order = orders.find(o => o.id === sample.orderId);
+  if (order) order.status = 'Approved';
+  renderDirectorPanel();
+}
+
+function generateReport(sampleId) {
+  const sample = samples.find(s => s.id === parseInt(sampleId));
+  if (!sample) return;
+  const order = orders.find(o => o.id === sample.orderId);
+  if (!order) return;
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
+
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('TEST REPORT', pageWidth / 2, y, { align: 'center' });
+  y += 12;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  const lines = [
+    \`Sample No: \${sample.sampleNumber}\`,
+    \`Order No: \${sample.orderNumber}\`,
+    \`Client: \${order.clientName}\`,
+    \`Product: \${sample.productName}\`,
+    \`Tests: \${sample.testNames.join(', ')}\`,
+    \`Date Received: \${sample.dateReceived}\`,
+    \`Status: \${sample.status}\`,
+  ];
+  lines.forEach(line => {
+    doc.text(line, 20, y);
+    y += 6;
+  });
+
+  y += 6;
+  doc.setFont('helvetica', 'bold');
+  doc.text('TEST RESULTS', 20, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+
+  // Table header
+  const colWidths = [60, 30, 25, 30, 35];
+  const headers = ['Test', 'Measured', 'Unit', 'Range', 'Result'];
+  let x = 20;
+  doc.setFont('helvetica', 'bold');
+  headers.forEach((h, i) => {
+    doc.text(h, x, y);
+    x += colWidths[i];
+  });
+  y += 6;
+  doc.setFont('helvetica', 'normal');
+
+  (sample.results || []).forEach((r, i) => {
+    const testName = sample.testNames[i] || TESTS[i] ? (TESTS[i] ? TESTS[i].name : sample.testNames[i]) : \`Test \${i+1}\`;
+    const test = TESTS.find(t => t.name === testName) || TESTS[0];
+    const num = parseFloat(r.measured);
+    const isPass = !isNaN(num) && num >= 3.0;
+
+    x = 20;
+    [testName, r.measured, test.unit, test.range, isPass ? 'PASS' : 'FAIL'].forEach((cell, i) => {
+      if (i === 4) {
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(isPass ? 22 : 220, isPass ? 100 : 30, isPass ? 54 : 30);
+        doc.text(cell, x, y);
+        doc.setTextColor(0);
+        doc.setFont('helvetica', 'normal');
+      } else {
+        doc.text(String(cell), x, y);
+      }
+      x += colWidths[i];
+    });
+    y += 6;
+  });
+
+  y += 10;
+  doc.setFont('helvetica', 'bold');
+  doc.text(\`Overall Result: \${sample.status}\`, 20, y);
+  y += 8;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text('This report is automatically generated by the LIMS Prototype.', 20, y);
+  doc.text('Report generated: ' + new Date().toLocaleDateString(), 20, y + 5);
+
+  doc.save(\`\${sample.sampleNumber}-\${sample.orderNumber}.pdf\`);
+  sample.status = 'Report Ready';
+  renderDirectorPanel();
+}
+
+// ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
 
