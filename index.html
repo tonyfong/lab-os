@@ -1166,6 +1166,7 @@ function openTechResultModal(sampleId) {
 
   document.getElementById('modal-title').textContent = `Enter Results — ${sample.sampleNumber}`;
   document.getElementById('modal-body').innerHTML = `
+    <div style="display:block;">
     <div style="margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;font-size:0.875rem;">
       <div style="display:grid;grid-template-columns:100px 1fr;gap:0.25rem 1rem;">
         <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
@@ -1201,6 +1202,7 @@ function openTechResultModal(sampleId) {
     <div style="display:flex;gap:0.5rem;justify-content:flex-end;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
       <button type="button" class="btn btn-secondary btn-sm" onclick="closeTechModal()">Cancel</button>
       <button type="button" class="btn btn-primary btn-sm" onclick="submitTechResults()">Submit Results</button>
+    </div>
     </div>
   `;
 
@@ -1457,7 +1459,8 @@ function openDirectorReviewModal(sampleId) {
       <div style="display:grid;grid-template-columns:110px 1fr;gap:0.25rem 1rem;font-size:0.875rem;margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
         <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
         <span style="color:#64748b;">Product</span><strong>${sample.productName}</strong>
-        <span style="color:#64748b;">Client</span><strong>${order ? order.clientName : '—'}</strong>
+        <span style="color:#64748b;">Client</span><strong>${order ? order.clientName : '—'}${order && order.company ? ' — ' + order.company : ''}</strong>
+        ${sample.testNames && sample.testNames.length ? `<span style="color:#64748b;">Tests</span><span>${sample.testNames.join(', ')}</span>` : ''}
         <span style="color:#64748b;">Technician</span>${sample.technician || '—'} (${sample.dateTested || '—'})
         ${sample.notes ? `<span style="color:#64748b;">Notes</span><span>${sample.notes}</span>` : ''}
       </div>
@@ -1474,16 +1477,16 @@ function openDirectorReviewModal(sampleId) {
         <tbody>${resultsRows}</tbody>
       </table>
     </div>
-    <div style="margin-top:1.5rem;padding-top:1rem;border-top:2px solid #e2e8f0;display:flex;flex-direction:column;gap:0.5rem;">
-      <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+    <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:0.75rem;color:#64748b;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests pending — approval requires all tests passed'}</div>
+      <div style="display:flex;gap:0.5rem;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})">
           Reject
         </button>
-        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled title="All tests must pass"'} onclick="approveSample(${sample.id})">
+        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})">
           Approve All
         </button>
       </div>
-      ${!allPassed ? '<div style="font-size:0.75rem;color:#dc2626;text-align:right;">⚠ All tests must pass before approval</div>' : ''}
     </div>
   `;
 
