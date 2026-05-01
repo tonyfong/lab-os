@@ -1169,22 +1169,20 @@ function openTechResultModal(sampleId) {
   document.getElementById('modal-title').textContent = `Enter Results — ${sample.sampleNumber}`;
   document.getElementById('modal-body').innerHTML = `
     <div style="display:block;">
-    <div style="margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;font-size:0.875rem;">
-      <div style="display:grid;grid-template-columns:100px 1fr;gap:0.25rem 1rem;">
-        <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
-        <span style="color:#64748b;">Product</span>${sample.productName}
-        <span style="color:#64748b;">Client</span>${order.clientName}
-        <span style="color:#64748b;">Tests</span>${sample.testNames.join(', ')}
-      </div>
+    <div style="margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;font-size:0.875rem;display:grid;grid-template-columns:100px 1fr;gap:0.25rem 1rem;">
+      <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
+      <span style="color:#64748b;">Product</span>${sample.productName}
+      <span style="color:#64748b;">Client</span>${order.clientName}
+      <span style="color:#64748b;">Tests</span>${sample.testNames.join(', ')}
     </div>
 
     <div style="margin-bottom:1rem;">
       <label style="font-weight:500;margin-bottom:0.5rem;display:block;">Test Results</label>
-      <div style="background:#f8fafc;border-radius:6px;padding:0.75rem;">
+      <div style="background:#f8fafc;border-radius:6px;padding:0.75rem;overflow-x:auto;">
         ${testRows}
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
       <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Technician *</label>
         <select id="tech-name" required style="width:100%;">
@@ -1196,7 +1194,7 @@ function openTechResultModal(sampleId) {
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Date Tested *</label>
         <input type="date" id="tech-date" value="${today}" required style="width:100%;">
       </div>
-      <div style="grid-column:3;grid-row:1;">
+      <div style="grid-column:1/-1;">
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Notes</label>
         <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:60px;resize:vertical;"></textarea>
       </div>
@@ -1481,13 +1479,13 @@ function openDirectorReviewModal(sampleId) {
         <tbody>${resultsRows}</tbody>
       </table>
     </div>
-    <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
-      <div style="font-size:0.75rem;color:#64748b;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests pending — approval requires all tests passed'}</div>
-      <div style="display:flex;gap:0.5rem;flex-shrink:1;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})" style="font-size:0.75rem;padding:0.2rem 0.6rem;">
+    <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
+      <div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests pending — approval requires all tests passed'}</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})" style="font-size:0.75rem;padding:0.25rem 0.75rem;">
           Reject
         </button>
-        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})" style="font-size:0.75rem;padding:0.2rem 0.6rem;">
+        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})" style="font-size:0.75rem;padding:0.25rem 0.75rem;">
           Approve All
         </button>
       </div>
