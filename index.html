@@ -272,7 +272,7 @@
       border-radius: 10px;
       padding: 1.5rem;
       width: 90%;
-      max-width: 800px;
+      max-width: 900px;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
@@ -1248,7 +1248,7 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:1fr 140px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
@@ -1265,7 +1265,7 @@ function openTechResultModal(sampleId) {
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:1fr 140px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method} &middot; Ref: ${test.range} ${test.unit}</div>
@@ -1296,19 +1296,19 @@ function openTechResultModal(sampleId) {
         ${testRows}
       </div>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
-      <div style="flex:1 1 200px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
+      <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Technician *</label>
         <select id="tech-name" required style="width:100%;padding:0.35rem;">
           <option value="">— Select —</option>
           ${techUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
         </select>
       </div>
-      <div style="flex:1 1 200px;">
+      <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Date Tested *</label>
         <input type="date" id="tech-date" value="${today}" required style="width:100%;padding:0.35rem;">
       </div>
-      <div style="flex:1 1 100%;">
+      <div style="grid-column:1/-1;">
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Notes</label>
         <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:50px;resize:vertical;padding:0.35rem;"></textarea>
       </div>
