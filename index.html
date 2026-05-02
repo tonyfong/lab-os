@@ -400,7 +400,7 @@
 <footer>
   LIMS Prototype v0.3 — STORY-4 · Textile & Softline Testing Lab
   &nbsp;·&nbsp;
-  <span id="build-ts">ROLLBACK 1925 · 2026-05-02 19:25</span>
+  <span id="build-ts">FIX-STR-ID-1935 · 2026-05-02 19:35</span>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1229,8 +1229,8 @@ function renderTechPanel() {
 let currentTechSampleId = null;
 
 function openTechResultModal(sampleId) {
-  const sid = Number(sampleId);
-  const sample = samples.find(s => s.id == sid);
+  const sid = String(sampleId);
+  const sample = samples.find(s => String(s.id) === sid);
   if (!sample) return;
   currentTechSampleId = sid;
 
@@ -1543,8 +1543,8 @@ function renderDirectorPanel() {
 let currentDirectorSampleId = null;
 
 function openDirectorReviewModal(sampleId) {
-  const sid = Number(sampleId);
-  const sample = samples.find(s => s.id == sid);
+  const sid = String(sampleId);
+  const sample = samples.find(s => String(s.id) === sid);
   if (!sample) return;
   currentDirectorSampleId = sid;
 
@@ -1614,8 +1614,8 @@ function openDirectorReviewModal(sampleId) {
 }
 
 function approveSample(sampleId) {
-  const sid = Number(sampleId);
-  const sample = samples.find(s => s.id == sid);
+  const sid = String(sampleId);
+  const sample = samples.find(s => String(s.id) === sid);
   if (!sample) return;
   if (!sample.results.every(r => r.passFail === 'Pass')) {
     alert('All tests must pass before approval.');
@@ -1627,8 +1627,8 @@ function approveSample(sampleId) {
 }
 
 function rejectSample(sampleId) {
-  const sid = Number(sampleId);
-  const sample = samples.find(s => s.id == sid);
+  const sid = String(sampleId);
+  const sample = samples.find(s => String(s.id) === sid);
   if (!sample) return;
   sample.status = 'Sample Received';
   sample.results = null;
@@ -1647,8 +1647,8 @@ function closeDirectorModal() {
 
 // Generate PDF report using jsPDF
 function generateSampleReport(sampleId) {
-  const sid = Number(sampleId);
-  const sample = samples.find(s => s.id == sid);
+  const sid = String(sampleId);
+  const sample = samples.find(s => String(s.id) === sid);
   if (!sample) return;
   const order = orders.find(o => o.id === sample.orderId);
 
