@@ -1135,32 +1135,32 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:1fr 160px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0.5rem;border-bottom:1px solid #f1f5f9;">
-          <div style="min-width:0;">
-            <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
+        <div style="display:flex;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap;">
+          <div style="min-width:120px;flex:1;">
+            <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
           </div>
-          <div>
+          <div style="min-width:120px;">
             <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
               <option value="">— Select —</option>
               <option value="Pass">Pass</option>
               <option value="Fail">Fail</option>
             </select>
           </div>
-          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;font-size:0.8rem;">—</div>
+          <div id="pf-${tid}" class="result-none" style="min-width:50px;text-align:center;font-weight:600;font-size:0.8rem;">—</div>
         </div>
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:1fr 160px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0.5rem;border-bottom:1px solid #f1f5f9;">
-          <div style="min-width:0;">
-            <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
+        <div style="display:flex;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap;">
+          <div style="min-width:120px;flex:1;">
+            <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
           </div>
-          <div>
+          <div style="min-width:120px;">
             <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
           </div>
-          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;font-size:0.8rem;">—</div>
+          <div id="pf-${tid}" class="result-none" style="min-width:50px;text-align:center;font-weight:600;font-size:0.8rem;">—</div>
         </div>
       `;
     }
