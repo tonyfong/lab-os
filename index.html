@@ -1248,7 +1248,7 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
+<div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
@@ -1265,7 +1265,7 @@ function openTechResultModal(sampleId) {
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
+<div style="display:grid;grid-template-columns:minmax(180px,2fr) 150px 90px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;">
           <div>
             <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
             <div style="font-size:0.7rem;color:#64748b;">${test.method} &middot; Ref: ${test.range} ${test.unit}</div>
