@@ -1229,9 +1229,10 @@ function renderTechPanel() {
 let currentTechSampleId = null;
 
 function openTechResultModal(sampleId) {
-  const sample = samples.find(s => s.id === sampleId);
+  const sid = Number(sampleId);
+  const sample = samples.find(s => s.id == sid);
   if (!sample) return;
-  currentTechSampleId = sampleId;
+  currentTechSampleId = sid;
 
   // Get tests for this sample
   const order = orders.find(o => o.id === sample.orderId);
@@ -1541,9 +1542,10 @@ function renderDirectorPanel() {
 let currentDirectorSampleId = null;
 
 function openDirectorReviewModal(sampleId) {
-  const sample = samples.find(s => s.id === sampleId);
+  const sid = Number(sampleId);
+  const sample = samples.find(s => s.id == sid);
   if (!sample) return;
-  currentDirectorSampleId = sampleId;
+  currentDirectorSampleId = sid;
 
   const order = orders.find(o => o.id === sample.orderId);
   if (!sample.results) return;
@@ -1611,7 +1613,8 @@ function openDirectorReviewModal(sampleId) {
 }
 
 function approveSample(sampleId) {
-  const sample = samples.find(s => s.id === sampleId);
+  const sid = Number(sampleId);
+  const sample = samples.find(s => s.id == sid);
   if (!sample) return;
   if (!sample.results.every(r => r.passFail === 'Pass')) {
     alert('All tests must pass before approval.');
@@ -1623,10 +1626,10 @@ function approveSample(sampleId) {
 }
 
 function rejectSample(sampleId) {
-  const sample = samples.find(s => s.id === sampleId);
+  const sid = Number(sampleId);
+  const sample = samples.find(s => s.id == sid);
   if (!sample) return;
   sample.status = 'Sample Received';
-  // Clear results
   sample.results = null;
   sample.technician = null;
   sample.technicianId = null;
@@ -1643,7 +1646,8 @@ function closeDirectorModal() {
 
 // Generate PDF report using jsPDF
 function generateSampleReport(sampleId) {
-  const sample = samples.find(s => s.id === sampleId);
+  const sid = Number(sampleId);
+  const sample = samples.find(s => s.id == sid);
   if (!sample) return;
   const order = orders.find(o => o.id === sample.orderId);
 
