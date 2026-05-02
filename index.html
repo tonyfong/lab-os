@@ -1135,32 +1135,32 @@ function openTechResultModal(sampleId) {
     const isReach = tid === 'T005';
     if (isReach) {
       return `
-        <div style="display:grid;grid-template-columns:minmax(150px,1fr) 180px 80px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
-          <div>
-            <div style="font-weight:500;">${test.name}</div>
-            <div style="font-size:0.75rem;color:#64748b;">${test.method}</div>
+        <div style="display:grid;grid-template-columns:1fr 160px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0.5rem;border-bottom:1px solid #f1f5f9;">
+          <div style="min-width:0;">
+            <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
+            <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
           </div>
           <div>
-            <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;">
+            <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
               <option value="">— Select —</option>
               <option value="Pass">Pass</option>
               <option value="Fail">Fail</option>
             </select>
           </div>
-          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;">—</div>
+          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;font-size:0.8rem;">—</div>
         </div>
       `;
     } else {
       return `
-        <div style="display:grid;grid-template-columns:minmax(150px,1fr) 180px 80px;gap:0.5rem;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f1f5f9;">
-          <div>
-            <div style="font-weight:500;">${test.name}</div>
-            <div style="font-size:0.75rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
+        <div style="display:grid;grid-template-columns:1fr 160px 70px;gap:0.5rem;align-items:center;padding:0.6rem 0.5rem;border-bottom:1px solid #f1f5f9;">
+          <div style="min-width:0;">
+            <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
+            <div style="font-size:0.7rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
           </div>
           <div>
-            <input type="number" id="result-${tid}" step="0.1" placeholder="Enter value" oninput="updatePFDisplay('${tid}')" style="width:100%;">
+            <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
           </div>
-          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;">—</div>
+          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;font-size:0.8rem;">—</div>
         </div>
       `;
     }
@@ -1168,38 +1168,38 @@ function openTechResultModal(sampleId) {
 
   document.getElementById('modal-title').textContent = `Enter Results — ${sample.sampleNumber}`;
   document.getElementById('modal-body').innerHTML = `
-    <div style="display:block;">
-    <div style="margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;font-size:0.875rem;display:grid;grid-template-columns:100px 1fr;gap:0.25rem 1rem;">
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    <div style="padding:0.75rem;background:#f8fafc;border-radius:6px;font-size:0.875rem;display:grid;grid-template-columns:80px 1fr;gap:0.25rem 0.75rem;">
       <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
-      <span style="color:#64748b;">Product</span>${sample.productName}
-      <span style="color:#64748b;">Client</span>${order.clientName}
-      <span style="color:#64748b;">Tests</span>${sample.testNames.join(', ')}
+      <span style="color:#64748b;">Product</span><strong>${sample.productName}</strong>
+      <span style="color:#64748b;">Client</span><strong>${order.clientName}</strong>
+      <span style="color:#64748b;">Tests</span><strong>${sample.testNames.join(', ')}</strong>
     </div>
 
-    <div style="margin-bottom:1rem;">
-      <label style="font-weight:500;margin-bottom:0.5rem;display:block;">Test Results</label>
-      <div style="background:#f8fafc;border-radius:6px;padding:0.75rem;overflow-x:auto;">
+    <div>
+      <label style="font-weight:600;margin-bottom:0.5rem;display:block;font-size:0.875rem;color:#334155;">Test Results</label>
+      <div style="background:#f8fafc;border-radius:6px;padding:0.5rem;overflow-x:auto;">
         ${testRows}
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
       <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Technician *</label>
-        <select id="tech-name" required style="width:100%;">
+        <select id="tech-name" required style="width:100%;padding:0.35rem;">
           <option value="">— Select —</option>
           ${techUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
         </select>
       </div>
       <div>
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Date Tested *</label>
-        <input type="date" id="tech-date" value="${today}" required style="width:100%;">
+        <input type="date" id="tech-date" value="${today}" required style="width:100%;padding:0.35rem;">
       </div>
       <div style="grid-column:1/-1;">
         <label style="font-size:0.75rem;color:#64748b;display:block;margin-bottom:0.25rem;">Notes</label>
-        <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:60px;resize:vertical;"></textarea>
+        <textarea id="tech-notes" placeholder="Optional remarks..." style="width:100%;min-height:50px;resize:vertical;padding:0.35rem;"></textarea>
       </div>
     </div>
-    <div style="display:flex;gap:0.5rem;justify-content:flex-end;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
+    <div style="display:flex;gap:0.5rem;justify-content:flex-end;padding-top:0.5rem;border-top:1px solid #e2e8f0;">
       <button type="button" class="btn btn-secondary btn-sm" onclick="closeTechModal()">Cancel</button>
       <button type="button" class="btn btn-primary btn-sm" onclick="submitTechResults()">Submit Results</button>
     </div>
@@ -1441,12 +1441,12 @@ function openDirectorReviewModal(sampleId) {
     const pf = r.passFail;
     const pfClass = pf === 'Pass' ? 'result-pass' : (pf === 'Fail' ? 'result-fail' : 'result-pending');
     return `
-      <tr>
-        <td>${r.testName}</td>
-        <td><code style="font-size:0.75rem;">${r.method}</code></td>
-        <td>${r.range} ${r.unit}</td>
-        <td>${r.measuredValue} ${r.unit}</td>
-        <td><span class="${pfClass}">${pf || 'Pending'}</span></td>
+      <tr style="border-bottom:1px solid #f1f5f9;">
+        <td style="padding:0.5rem;font-weight:500;">${r.testName}</td>
+        <td style="padding:0.5rem;"><code style="font-size:0.7rem;background:#f1f5f9;padding:0.1rem 0.3rem;border-radius:3px;">${r.method}</code></td>
+        <td style="padding:0.5rem;color:#64748b;">${r.range} ${r.unit}</td>
+        <td style="padding:0.5rem;font-weight:600;">${r.measuredValue} ${r.unit}</td>
+        <td style="padding:0.5rem;text-align:center;"><span class="${pfClass}">${pf || 'Pending'}</span></td>
       </tr>
     `;
   }).join('');
@@ -1455,40 +1455,46 @@ function openDirectorReviewModal(sampleId) {
 
   document.getElementById('modal-title').textContent = `Review — ${sample.sampleNumber}`;
   document.getElementById('modal-body').innerHTML = `
-    <div style="margin-bottom:1rem;">
-      <h4 style="font-size:0.875rem;color:#475569;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid #e2e8f0;">Sample Information</h4>
-      <div style="display:grid;grid-template-columns:110px 1fr;gap:0.25rem 1rem;font-size:0.875rem;margin-bottom:1rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    <div>
+      <h4 style="font-size:0.8rem;color:#64748b;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid #e2e8f0;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Sample Information</h4>
+      <div style="display:grid;grid-template-columns:90px 1fr;gap:0.2rem 0.75rem;font-size:0.8rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
         <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
         <span style="color:#64748b;">Product</span><strong>${sample.productName}</strong>
         <span style="color:#64748b;">Client</span><strong>${order ? order.clientName : '—'}</strong>
         <span style="color:#64748b;">Company</span><strong>${order && order.company ? order.company : '—'}</strong>
-        ${sample.testNames && sample.testNames.length ? `<span style="color:#64748b;">Tests</span><span>${sample.testNames.join(', ')}</span>` : ''}
-        <span style="color:#64748b;">Technician</span>${sample.technician || '—'} (${sample.dateTested || '—'})
-        ${sample.notes ? `<span style="color:#64748b;">Notes</span><span>${sample.notes}</span>` : ''}
+        <span style="color:#64748b;">Technician</span><span>${sample.technician || '—'}</span>
+        <span style="color:#64748b;">Date Tested</span><span>${sample.dateTested || '—'}</span>
+        ${sample.notes ? `<span style="color:#64748b;">Notes</span><span style="grid-column:2;">${sample.notes}</span>` : ''}
       </div>
-      <table>
+    </div>
+    <div style="overflow-x:auto;border-radius:6px;border:1px solid #e2e8f0;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
         <thead>
-          <tr>
-            <th>Test</th>
-            <th>Method</th>
-            <th>Reference</th>
-            <th>Measured</th>
-            <th>Result</th>
+          <tr style="background:#f1f5f9;">
+            <th style="padding:0.5rem;text-align:left;font-weight:600;color:#475569;">Test</th>
+            <th style="padding:0.5rem;text-align:left;font-weight:600;color:#475569;">Method</th>
+            <th style="padding:0.5rem;text-align:left;font-weight:600;color:#475569;">Reference</th>
+            <th style="padding:0.5rem;text-align:left;font-weight:600;color:#475569;">Measured</th>
+            <th style="padding:0.5rem;text-align:center;font-weight:600;color:#475569;">Result</th>
           </tr>
         </thead>
         <tbody>${resultsRows}</tbody>
       </table>
     </div>
-    <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;">
-      <div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests pending — approval requires all tests passed'}</div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button type="button" class="btn btn-secondary" onclick="rejectSample(${sample.id})" style="font-size:0.75rem;padding:0.3rem 0.75rem;">
+    <div style="padding-top:0.75rem;border-top:1px solid #e2e8f0;">
+      <div style="font-size:0.75rem;color:${allPassed ? '#166534' : '#b45309'};margin-bottom:0.5rem;">
+        ${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests must all pass before approval'}
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample(${sample.id})">
           Reject
         </button>
-        <button type="button" class="btn btn-primary" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})" style="font-size:0.75rem;padding:0.3rem 0.75rem;">
+        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample(${sample.id})">
           Approve All
         </button>
       </div>
+    </div>
     </div>
   `;
 
