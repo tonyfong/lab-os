@@ -445,11 +445,109 @@ const STATUS_BADGE = {
 // ORDERS STATE
 // ═══════════════════════════════════════════════════════════
 
-const orders = [];
-let orderCounter = 0;
+const orders = [
+  // Story 5 – Tech needs to enter results
+  {
+    id: 'ORD-DEMO-01',
+    orderNumber: 'ORD-2026-0001',
+    clientName: 'Metro Fashion Ltd',
+    company: 'Metro Group Co Ltd',
+    email: 'sarah@metrofashion.com',
+    productName: 'Cotton T-Shirt',
+    quantity: 50,
+    testTypes: ['T001', 'T003'],
+    testNames: ['Colorfastness to Washing', 'pH Value'],
+    status: 'Pending',
+    submittedDate: '2026-05-01',
+    notes: 'Urgent — summer collection launch'
+  },
+  // Story 6 – Director needs to approve
+  {
+    id: 'ORD-DEMO-02',
+    orderNumber: 'ORD-2026-0002',
+    clientName: 'Denim Co Ltd',
+    company: 'Denim Co Ltd',
+    email: 'orders@denimco.com',
+    productName: 'Denim Jeans',
+    quantity: 30,
+    testTypes: ['T001', 'T002', 'T003'],
+    testNames: ['Colorfastness to Washing', 'Shrinkage', 'pH Value'],
+    status: 'Pending',
+    submittedDate: '2026-04-28',
+    notes: ''
+  },
+  // Story 7/8 – Approved, report ready
+  {
+    id: 'ORD-DEMO-03',
+    orderNumber: 'ORD-2026-0003',
+    clientName: 'Sportswear Corp',
+    company: 'Sportswear Corp',
+    email: 'lab@sportswear.com',
+    productName: 'Polyester Jacket',
+    quantity: 20,
+    testTypes: ['T001', 'T003', 'T004'],
+    testNames: ['Colorfastness to Washing', 'pH Value', 'Tensile Strength'],
+    status: 'Pending',
+    submittedDate: '2026-04-20',
+    notes: ''
+  },
+];
+let orderCounter = 3;
 
-const samples = [];
-let sampleCounter = 0;
+const samples = [
+  // ORD-DEMO-01 → pending tech results
+  {
+    id: 'SMP-DEMO-01',
+    sampleNumber: 'LAB-2026-0001',
+    orderId: 'ORD-DEMO-01',
+    orderNumber: 'ORD-2026-0001',
+    productName: 'Cotton T-Shirt',
+    testNames: ['Colorfastness to Washing', 'pH Value'],
+    status: 'Sample Received',
+    dateReceived: '2026-05-01'
+  },
+  // ORD-DEMO-02 → results entered, awaiting director
+  {
+    id: 'SMP-DEMO-02',
+    sampleNumber: 'LAB-2026-0002',
+    orderId: 'ORD-DEMO-02',
+    orderNumber: 'ORD-2026-0002',
+    productName: 'Denim Jeans',
+    testNames: ['Colorfastness to Washing', 'Shrinkage', 'pH Value'],
+    status: 'Ready for Review',
+    dateReceived: '2026-04-29',
+    technician: 'Mary Wong',
+    technicianId: 'U003',
+    dateTested: '2026-05-01',
+    notes: 'Colorfastness borderline — Grade 3.0 exactly',
+    results: [
+      { testId: 'T001', testName: 'Colorfastness to Washing', method: 'ISO 105-C10', unit: 'Grade', range: '≥ 3.0', measuredValue: '3.0', passFail: 'Pass' },
+      { testId: 'T002', testName: 'Shrinkage', method: 'ISO 6330', unit: '%', range: '≤ 5.0', measuredValue: '2.1', passFail: 'Pass' },
+      { testId: 'T003', testName: 'pH Value', method: 'ISO 3071', unit: 'pH', range: '4.5–8.5', measuredValue: '6.8', passFail: 'Pass' },
+    ]
+  },
+  // ORD-DEMO-03 → approved, report ready
+  {
+    id: 'SMP-DEMO-03',
+    sampleNumber: 'LAB-2026-0003',
+    orderId: 'ORD-DEMO-03',
+    orderNumber: 'ORD-2026-0003',
+    productName: 'Polyester Jacket',
+    testNames: ['Colorfastness to Washing', 'pH Value', 'Tensile Strength'],
+    status: 'Approved',
+    dateReceived: '2026-04-21',
+    technician: 'Mary Wong',
+    technicianId: 'U003',
+    dateTested: '2026-04-25',
+    notes: '',
+    results: [
+      { testId: 'T001', testName: 'Colorfastness to Washing', method: 'ISO 105-C10', unit: 'Grade', range: '≥ 3.0', measuredValue: '4.2', passFail: 'Pass' },
+      { testId: 'T003', testName: 'pH Value', method: 'ISO 3071', unit: 'pH', range: '4.5–8.5', measuredValue: '7.1', passFail: 'Pass' },
+      { testId: 'T004', testName: 'Tensile Strength', method: 'ISO 13934-2', unit: 'N', range: '≥ 200', measuredValue: '285', passFail: 'Pass' },
+    ]
+  },
+];
+let sampleCounter = 3;
 
 function nextOrderNumber() {
   orderCounter++;
