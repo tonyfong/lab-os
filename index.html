@@ -841,7 +841,7 @@ function renderOrdersList() {
             <td>${o.quantity}</td>
             <td><span class="badge ${STATUS_BADGE[o.status]}">${o.status}</span></td>
             <td>${o.submittedDate}</td>
-            <td><button class="btn btn-secondary btn-sm" onclick="viewOrder(${o.id})">View</button></td>
+            <td><button class="btn btn-secondary btn-sm" onclick="viewOrder('${o.id}')">View</button></td>
           </tr>
         `).join('')}
       </tbody>
@@ -968,7 +968,7 @@ function renderPendingOrders() {
               <td style="font-size:0.8rem;color:#64748b;">${o.testNames.join(', ')}</td>
               <td>${o.submittedDate}</td>
               <td>
-                <button class="btn btn-primary btn-sm" onclick="openSampleRegModal(${o.id})">
+                <button class="btn btn-primary btn-sm" onclick="openSampleRegModal('${o.id}')">
                   Register Sample
                 </button>
               </td>
