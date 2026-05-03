@@ -1136,7 +1136,7 @@ function closeModal() {
 function calcPassFail(testId, value) {
   if (testId === 'T001') return value >= 3.0;
   if (testId === 'T002') return value <= 5.0;
-  if (testId === 'T003') return value >= 4.5 && value <= 8.5; // updated to match range display 4.5-8.5
+  if (testId === 'T003') return value >= 4.5 && value <= 7.0; // spec: 4.5-7.0
   if (testId === 'T004') return value >= 200.0;
   if (testId === 'T005') return value === 'Pass';
   return null;
@@ -1247,31 +1247,35 @@ function openTechResultModal(sampleId) {
     const test = TESTS.find(t => t.id === tid);
     const isReach = tid === 'T005';
     if (isReach) {
-      return `<tr>
-        <td style="padding:0.5rem 0.75rem;">
-          <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
-          <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
-        </td>
-        <td style="padding:0.5rem 0.5rem;">
-          <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
-            <option value="">— Select —</option>
-            <option value="Pass">Pass</option>
-            <option value="Fail">Fail</option>
-          </select>
-        </td>
-        <td style="padding:0.5rem 0.5rem;text-align:center;" id="pf-${tid}" class="result-none">—</td>
-      </tr>`;
+      return `
+<div style="display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap;">
+          <div style="flex:1;min-width:180px;">
+            <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
+            <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
+          </div>
+          <div style="width:140px;flex-shrink:0;">
+            <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
+              <option value="">— Select —</option>
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
+          </div>
+          <div id="pf-${tid}" class="result-none" style="width:70px;flex-shrink:0;text-align:center;font-weight:600;font-size:0.8rem;">—</div>
+        </div>
+      `;
     } else {
-      return `<tr>
-        <td style="padding:0.5rem 0.75rem;">
-          <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
-          <div style="font-size:0.7rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
-        </td>
-        <td style="padding:0.5rem 0.5rem;">
-          <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
-        </td>
-        <td style="padding:0.5rem 0.5rem;text-align:center;" id="pf-${tid}" class="result-none">—</td>
-      </tr>`;
+      return `
+<div style="display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap;">
+          <div style="flex:1;min-width:180px;">
+            <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
+            <div style="font-size:0.7rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
+          </div>
+          <div style="width:120px;flex-shrink:0;">
+            <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
+          </div>
+          <div id="pf-${tid}" class="result-none" style="width:70px;flex-shrink:0;text-align:center;font-weight:600;font-size:0.8rem;">—</div>
+        </div>
+      `;
     }
   }).join('');
 
@@ -1289,36 +1293,32 @@ function openTechResultModal(sampleId) {
     <div>
       <label style="font-weight:600;margin-bottom:0.5rem;display:block;font-size:0.875rem;color:#334155;">Test Results</label>
       <div style="background:#f8fafc;border-radius:6px;padding:0.5rem;overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;table-layout:fixed;">
-          <thead>
-            <tr style="background:#f1f5f9;border-bottom:1px solid #e2e8f0;">
-              <th style="padding:0.3rem 0.5rem;text-align:left;font-weight:600;color:#475569;">Test / Method</th>
-              <th style="padding:0.3rem 0.5rem;text-align:center;font-weight:600;color:#475569;width:130px;">Value</th>
-              <th style="padding:0.3rem 0.5rem;text-align:center;font-weight:600;color:#475569;width:80px;">Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${testIds.map(tid => {
-              const test = TESTS.find(t => t.id === tid);
-              const isReach = tid === 'T005';
-              return `
-            <tr style="border-bottom:1px solid #f1f5f9;">
-              <td style="padding:0.5rem;">
-                <div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
-                <div style="font-size:0.7rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.method}${isReach ? '' : ' · Ref: ' + test.range + ' ' + test.unit}</div>
-              </td>
-              <td style="padding:0.5rem;text-align:center;">
-                ${isReach ? `<select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
-                  <option value="">— Select —</option>
-                  <option value="Pass">Pass</option>
-                  <option value="Fail">Fail</option>
-                </select>` : `<input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">`}
-              </td>
-              <td style="padding:0.5rem;text-align:center;" id="pf-${tid}" class="result-none">—</td>
-            </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
+        <div style="min-width:480px;">
+          <div style="display:flex;align-items:center;padding:0.3rem 0.5rem;background:#f1f5f9;border-bottom:1px solid #e2e8f0;font-size:0.7rem;font-weight:600;color:#475569;">
+            <div style="flex:1;">Test / Method</div>
+            <div style="width:130px;text-align:center;">Value</div>
+            <div style="width:80px;text-align:center;">Result</div>
+          </div>
+          ${testIds.map(tid => {
+            const test = TESTS.find(t => t.id === tid);
+            const isReach = tid === 'T005';
+            return `
+          <div style="display:flex;align-items:center;padding:0.5rem;border-bottom:1px solid #f1f5f9;gap:0.5rem;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
+              <div style="font-size:0.7rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.method}${isReach ? '' : ' · Ref: ' + test.range + ' ' + test.unit}</div>
+            </div>
+            <div style="width:130px;flex-shrink:0;">
+              ${isReach ? `<select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
+                <option value="">— Select —</option>
+                <option value="Pass">Pass</option>
+                <option value="Fail">Fail</option>
+              </select>` : `<input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">`}
+            </div>
+            <div id="pf-${tid}" class="result-none" style="width:80px;flex-shrink:0;text-align:center;font-weight:600;font-size:0.8rem;">—</div>
+          </div>`;
+          }).join('')}
+        </div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
