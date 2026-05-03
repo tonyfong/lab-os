@@ -1247,26 +1247,31 @@ function openTechResultModal(sampleId) {
     const test = TESTS.find(t => t.id === tid);
     const isReach = tid === 'T005';
     if (isReach) {
-      return `
-<div style="display:grid;grid-template-columns:minmax(180px,1fr) 150px 80px;gap:0.5rem;align-items:center;padding:0.6rem 0;border-bottom:1px solid #f1f5f9;min-width:0;">
-          <div style="min-width:0;">
-            <div style="font-weight:500;font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.name}</div>
-            <div style="font-size:0.7rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${test.method}${isReach ? '' : ' · Ref: ' + test.range + ' ' + test.unit}</div>
-          </div>
-          <div>
-            ${isReach ? `
-            <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
-              <option value="">— Select —</option>
-              <option value="Pass">Pass</option>
-              <option value="Fail">Fail</option>
-            </select>
-            ` : `
-            <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
-            `}
-          </div>
-          <div id="pf-${tid}" class="result-none" style="text-align:center;font-weight:600;font-size:0.8rem;">—</div>
-        </div>
-      `;
+      return `<tr>
+        <td style="padding:0.5rem 0.75rem;">
+          <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
+          <div style="font-size:0.7rem;color:#64748b;">${test.method}</div>
+        </td>
+        <td style="padding:0.5rem 0.5rem;">
+          <select id="result-${tid}" onchange="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;">
+            <option value="">— Select —</option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
+          </select>
+        </td>
+        <td style="padding:0.5rem 0.5rem;text-align:center;" id="pf-${tid}" class="result-none">—</td>
+      </tr>`;
+    } else {
+      return `<tr>
+        <td style="padding:0.5rem 0.75rem;">
+          <div style="font-weight:500;font-size:0.8rem;">${test.name}</div>
+          <div style="font-size:0.7rem;color:#64748b;">${test.method} · Ref: ${test.range} ${test.unit}</div>
+        </td>
+        <td style="padding:0.5rem 0.5rem;">
+          <input type="number" id="result-${tid}" step="0.1" placeholder="—" oninput="updatePFDisplay('${tid}')" style="width:100%;padding:0.3rem;font-size:0.8rem;text-align:center;">
+        </td>
+        <td style="padding:0.5rem 0.5rem;text-align:center;" id="pf-${tid}" class="result-none">—</td>
+      </tr>`;
     }
   }).join('');
 
@@ -1283,10 +1288,19 @@ function openTechResultModal(sampleId) {
 
     <div>
       <label style="font-weight:600;margin-bottom:0.5rem;display:block;font-size:0.875rem;color:#334155;">Test Results</label>
-      <div style="background:#f8fafc;border-radius:6px;padding:0.5rem;overflow-x:auto;">
-        <div style="min-width:500px;">
-        ${testRows}
-        </div>
+      <div style="background:#f8fafc;border-radius:6px;padding:0.5rem;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <th style="text-align:left;padding:0.4rem 0.5rem;font-size:0.75rem;color:#64748b;font-weight:500;">Test / Method</th>
+              <th style="text-align:center;padding:0.4rem 0.5rem;font-size:0.75rem;color:#64748b;font-weight:500;width:150px;">Value</th>
+              <th style="text-align:center;padding:0.4rem 0.5rem;font-size:0.75rem;color:#64748b;font-weight:500;width:90px;">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${testRows}
+          </tbody>
+        </table>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
