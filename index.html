@@ -854,7 +854,7 @@ function renderOrdersList() {
 // ═══════════════════════════════════════════════════════════
 
 function viewOrder(id) {
-  const order = orders.find(o => o.id === id);
+  const order = orders.find(o => o.id == id);
   if (!order) return;
 
   document.getElementById('modal-title').textContent = `Order ${order.orderNumber}`;
@@ -1031,7 +1031,7 @@ function renderLabQueue() {
 let currentRegOrderId = null;
 
 function openSampleRegModal(orderId) {
-  const order = orders.find(o => o.id === orderId);
+  const order = orders.find(o => o.id == orderId);
   if (!order) return;
 
   currentRegOrderId = orderId;
