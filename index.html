@@ -442,6 +442,14 @@ const STATUS_BADGE = {
 };
 
 // ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+function getClientDisplay(orderId) {
+  const o = orders.find(x => x.id === orderId) || {};
+  return o.clientTitle ? o.clientTitle + ' ' + (o.clientName || '—') : (o.clientName || '—');
+}
+
+// ═══════════════════════════════════════════════════════════
 // ORDERS STATE
 // ═══════════════════════════════════════════════════════════
 
@@ -1474,7 +1482,7 @@ function renderDirectorPanel() {
             ${reviewSamples.map(s => `
               <tr>
                 <td><code>${s.sampleNumber}</code></td>
-                <td>${s.results && s.results[0] ? (orders.find(o=>o.id===s.orderId)||{}).clientName || '—' : '—'}</td>
+                <td>${s.results && s.results[0] ? getClientDisplay(s.orderId) : '—'}</td>
                 <td>${s.productName}</td>
                 <td style="font-size:0.8rem;color:#64748b;">${(s.results||[]).map(r=>r.testName).join(', ')}</td>
                 <td>${s.technician || '—'}</td>
@@ -1512,7 +1520,7 @@ function renderDirectorPanel() {
             ${approvedSamples.map(s => `
               <tr>
                 <td><code>${s.sampleNumber}</code></td>
-                <td>${(orders.find(o=>o.id===s.orderId)||{}).clientName || '—'}</td>
+                <td>${getClientDisplay(s.orderId)}</td>
                 <td>${s.productName}</td>
                 <td style="font-size:0.8rem;color:#64748b;">${(s.results||[]).map(r=>r.testName).join(', ')}</td>
                 <td><span class="badge badge-approved">Approved</span></td>
@@ -1548,7 +1556,7 @@ function renderDirectorPanel() {
             ${reportSamples.map(s => `
               <tr>
                 <td><code>${s.sampleNumber}</code></td>
-                <td>${(orders.find(o=>o.id===s.orderId)||{}).clientName || '—'}</td>
+                <td>${getClientDisplay(s.orderId)}</td>
                 <td>${s.productName}</td>
                 <td style="font-size:0.8rem;color:#64748b;">${(s.results||[]).map(r=>r.testName).join(', ')}</td>
                 <td><span class="badge badge-report">Report Ready</span></td>
@@ -1709,7 +1717,7 @@ function generateSampleReport(sampleId) {
   const info = [
     ['Lab Number', sample.sampleNumber],
     ['Order Number', order ? order.orderNumber : '—'],
-    ['Client', order ? order.clientName : '—'],
+    ['Client', order ? (order.clientTitle ? order.clientTitle + ' ' : '') + order.clientName : '—'],
     ['Company', order && order.company ? order.company : '—'],
     ['Product', sample.productName],
     ['Sample Description', sample.description || '—'],
