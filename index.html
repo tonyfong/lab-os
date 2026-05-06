@@ -1609,7 +1609,7 @@ function openDirectorReviewModal(sampleId) {
       <div style="display:grid;grid-template-columns:90px 1fr;gap:0.2rem 0.75rem;font-size:0.8rem;padding:0.75rem;background:#f8fafc;border-radius:6px;">
         <span style="color:#64748b;">Lab #</span><strong>${sample.sampleNumber}</strong>
         <span style="color:#64748b;">Product</span><strong>${sample.productName}</strong>
-        <span style="color:#64748b;">Client</span><strong>${order && order.clientTitle ? order.clientTitle + ' ' : ''}${order ? order.clientName : '—'}</strong>
+        <span style="color:#64748b;">Client</span><strong>${order ? (order.clientTitle ? order.clientTitle + ' ' : '') + order.clientName : '—'}</strong>
         <span style="color:#64748b;">Company</span><strong>${order && order.company ? order.company : '—'}</strong>
         <span style="color:#64748b;">Technician</span><span>${sample.technician || '—'}</span>
         <span style="color:#64748b;">Date Tested</span><span>${sample.dateTested || '—'}</span>
@@ -1632,11 +1632,11 @@ function openDirectorReviewModal(sampleId) {
     </div>
     <div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
       <div style="font-size:0.75rem;color:#64748b;">${allPassed ? '✓ All tests passed — ready for approval' : '⚠ Tests must all pass before approval'}</div>
-      <div style="display:flex;gap:0.5rem;flex-shrink:0;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample('${sample.id}')" style="font-size:0.75rem;padding:0.25rem 0.6rem;">
+      <div style="display:flex;gap:0.4rem;flex-shrink:0;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="rejectSample('${sample.id}')" style="font-size:0.7rem;padding:0.2rem 0.5rem;">
           Reject
         </button>
-        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample('${sample.id}')" style="font-size:0.75rem;padding:0.25rem 0.6rem;">
+        <button type="button" class="btn btn-primary btn-sm" ${allPassed ? '' : 'disabled'} onclick="approveSample('${sample.id}')" style="font-size:0.7rem;padding:0.2rem 0.5rem;">
           Approve All
         </button>
       </div>
